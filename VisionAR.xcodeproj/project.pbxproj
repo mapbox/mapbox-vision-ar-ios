@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2A4114602257C3293C09A5D8 /* Pods_VisionAR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB4BC9C9209A6D63B2DDC761 /* Pods_VisionAR.framework */; };
 		2EAB319E21440CEC0034D81C /* VisionAR.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EAB319C21440CEC0034D81C /* VisionAR.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2EAB31B121440D2F0034D81C /* ARScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAB31AE21440D2E0034D81C /* ARScene.swift */; };
 		2EAB31B221440D2F0034D81C /* ARMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAB31AF21440D2F0034D81C /* ARMath.swift */; };
@@ -15,8 +16,6 @@
 		2EAB31B521440D2F0034D81C /* ARRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAB31AC21440D2B0034D81C /* ARRenderer.swift */; };
 		2EAB31B621440D2F0034D81C /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 2EAB31A721440D280034D81C /* Shaders.metal */; };
 		2EAB31B721440D2F0034D81C /* NavigationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAB31A621440D270034D81C /* NavigationProvider.swift */; };
-		2EAB31BA21440DCD0034D81C /* VisionSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EAB31B921440DCD0034D81C /* VisionSDK.framework */; };
-		2EAB31BC21440DE40034D81C /* MapboxCoreNavigation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EAB31BB21440DE40034D81C /* MapboxCoreNavigation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,9 +32,10 @@
 		2EAB31AD21440D2C0034D81C /* VisionARNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisionARNavigationViewController.swift; sourceTree = "<group>"; };
 		2EAB31AE21440D2E0034D81C /* ARScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARScene.swift; sourceTree = "<group>"; };
 		2EAB31AF21440D2F0034D81C /* ARMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARMath.swift; sourceTree = "<group>"; };
-		2EAB31B021440D2F0034D81C /* VisionAR.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VisionAR.h; path = ../../VisionSDK/VisionAR/VisionAR.h; sourceTree = "<group>"; };
-		2EAB31B921440DCD0034D81C /* VisionSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VisionSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2EAB31BB21440DE40034D81C /* MapboxCoreNavigation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapboxCoreNavigation.framework; path = ../Carthage/Build/iOS/MapboxCoreNavigation.framework; sourceTree = "<group>"; };
+		3026EA35CB8D710520D0D6D0 /* Pods-VisionAR.adhocrelease.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisionAR.adhocrelease.xcconfig"; path = "Pods/Target Support Files/Pods-VisionAR/Pods-VisionAR.adhocrelease.xcconfig"; sourceTree = "<group>"; };
+		450F931F2DA53B8086C310BF /* Pods-VisionAR.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisionAR.debug.xcconfig"; path = "Pods/Target Support Files/Pods-VisionAR/Pods-VisionAR.debug.xcconfig"; sourceTree = "<group>"; };
+		AB8742E869A652621C52A3DB /* Pods-VisionAR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VisionAR.release.xcconfig"; path = "Pods/Target Support Files/Pods-VisionAR/Pods-VisionAR.release.xcconfig"; sourceTree = "<group>"; };
+		EB4BC9C9209A6D63B2DDC761 /* Pods_VisionAR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VisionAR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,8 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2EAB31BC21440DE40034D81C /* MapboxCoreNavigation.framework in Frameworks */,
-				2EAB31BA21440DCD0034D81C /* VisionSDK.framework in Frameworks */,
+				2A4114602257C3293C09A5D8 /* Pods_VisionAR.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,6 +56,7 @@
 				2EAB319B21440CEC0034D81C /* VisionAR */,
 				2EAB319A21440CEC0034D81C /* Products */,
 				2EAB31B821440DCD0034D81C /* Frameworks */,
+				5BA84AF8147B4E65132CE7E5 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -77,7 +77,6 @@
 				2EAB31AF21440D2F0034D81C /* ARMath.swift */,
 				2EAB31A721440D280034D81C /* Shaders.metal */,
 				2EAB31AD21440D2C0034D81C /* VisionARNavigationViewController.swift */,
-				2EAB31B021440D2F0034D81C /* VisionAR.h */,
 				2EAB31A421440D240034D81C /* Info.plist */,
 				2EAB31A521440D250034D81C /* NavigationRoute+Route.swift */,
 				2EAB31A621440D270034D81C /* NavigationProvider.swift */,
@@ -99,10 +98,19 @@
 		2EAB31B821440DCD0034D81C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2EAB31BB21440DE40034D81C /* MapboxCoreNavigation.framework */,
-				2EAB31B921440DCD0034D81C /* VisionSDK.framework */,
+				EB4BC9C9209A6D63B2DDC761 /* Pods_VisionAR.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5BA84AF8147B4E65132CE7E5 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				450F931F2DA53B8086C310BF /* Pods-VisionAR.debug.xcconfig */,
+				AB8742E869A652621C52A3DB /* Pods-VisionAR.release.xcconfig */,
+				3026EA35CB8D710520D0D6D0 /* Pods-VisionAR.adhocrelease.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -123,6 +131,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2EAB31A121440CEC0034D81C /* Build configuration list for PBXNativeTarget "VisionAR" */;
 			buildPhases = (
+				50D695AAC80CEDAD16F87669 /* [CP] Check Pods Manifest.lock */,
 				2EAB319421440CEC0034D81C /* Sources */,
 				2EAB319521440CEC0034D81C /* Frameworks */,
 				2EAB319621440CEC0034D81C /* Headers */,
@@ -177,6 +186,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		50D695AAC80CEDAD16F87669 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VisionAR-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2EAB319421440CEC0034D81C /* Sources */ = {
@@ -319,6 +349,7 @@
 		};
 		2EAB31A221440CEC0034D81C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 450F931F2DA53B8086C310BF /* Pods-VisionAR.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -350,6 +381,7 @@
 		};
 		2EAB31A321440CEC0034D81C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AB8742E869A652621C52A3DB /* Pods-VisionAR.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -438,6 +470,7 @@
 		};
 		2EAB31BE214412030034D81C /* AdhocRelease */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3026EA35CB8D710520D0D6D0 /* Pods-VisionAR.adhocrelease.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
