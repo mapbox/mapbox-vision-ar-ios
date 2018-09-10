@@ -1,0 +1,2 @@
+git "git@github.com/mapbox/VisionSDK" "carthage"
+github "mapbox/mapbox-navigation-ios" ~> 0.20.0

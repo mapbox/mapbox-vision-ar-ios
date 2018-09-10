@@ -1,0 +1,4 @@
+binary "https://www.dropbox.com/s/0oax97hie3mwwg0/VisionCore.json?dl=1" "0.0.1-alpha-1"
+github "mapbox/VisionSDK" "a9b01ca692400f92e9b86801c8ca76a6b97a42ab"
+github "mapbox/mapbox-events-ios" "v0.5.0"
+github "marmelroy/Zip" "1.1.0"
