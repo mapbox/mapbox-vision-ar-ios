@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 
-  s.name         = "VisionAR"
+  s.name         = "MapboxVisionAR"
   s.version      = "0.0.1-alpha.1"
   s.summary      = "Easy to use AR Navigation"
 
@@ -15,10 +15,10 @@ Pod::Spec.new do |s|
   s.platform              = :ios
   s.ios.deployment_target = '11.2'
 
-  s.source        = { :git => "git@github.com:mapbox/VisionAR.git", :branch => "alpha-1" }
+  s.source        = { :git => "git@github.com:mapbox/mapbox-vision-ar-ios.git", :branch => "alpha-1" }
 
-  s.source_files  = "VisionAR/**/*.{swift,h,metal}"
-  s.resource      = "VisionAR/Models/*"
+  s.source_files  = "MapboxVisionAR/**/*.{swift,h,metal}"
+  s.resource      = "MapboxVisionAR/Models/*"
 
   s.requires_arc = true
 

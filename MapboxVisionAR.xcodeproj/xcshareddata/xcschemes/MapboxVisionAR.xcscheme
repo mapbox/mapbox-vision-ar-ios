@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2EAB319821440CEC0034D81C"
-               BuildableName = "VisionAR.framework"
-               BlueprintName = "VisionAR"
-               ReferencedContainer = "container:VisionAR.xcodeproj">
+               BuildableName = "MapboxVisionAR.framework"
+               BlueprintName = "MapboxVisionAR"
+               ReferencedContainer = "container:MapboxVisionAR.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -46,9 +46,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2EAB319821440CEC0034D81C"
-            BuildableName = "VisionAR.framework"
-            BlueprintName = "VisionAR"
-            ReferencedContainer = "container:VisionAR.xcodeproj">
+            BuildableName = "MapboxVisionAR.framework"
+            BlueprintName = "MapboxVisionAR"
+            ReferencedContainer = "container:MapboxVisionAR.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -64,9 +64,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2EAB319821440CEC0034D81C"
-            BuildableName = "VisionAR.framework"
-            BlueprintName = "VisionAR"
-            ReferencedContainer = "container:VisionAR.xcodeproj">
+            BuildableName = "MapboxVisionAR.framework"
+            BlueprintName = "MapboxVisionAR"
+            ReferencedContainer = "container:MapboxVisionAR.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

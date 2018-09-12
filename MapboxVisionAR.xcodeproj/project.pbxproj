@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2E454928214683CF0095BE31 /* VisionSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E454927214683CF0095BE31 /* VisionSDK.framework */; };
+		2E454928214683CF0095BE31 /* MapboxVision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E454927214683CF0095BE31 /* MapboxVision.framework */; };
 		2E45492A21468A270095BE31 /* MapboxCoreNavigation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E45492921468A270095BE31 /* MapboxCoreNavigation.framework */; };
 		2E45492B2146999B0095BE31 /* lane.obj in Resources */ = {isa = PBXBuildFile; fileRef = 2EAB31A821440D290034D81C /* lane.obj */; };
 		2E45492C2146999B0095BE31 /* grid.obj in Resources */ = {isa = PBXBuildFile; fileRef = 2EAB31A921440D290034D81C /* grid.obj */; };
 		2E45492D2146999B0095BE31 /* nav-arrow.obj in Resources */ = {isa = PBXBuildFile; fileRef = 2EAB31AA21440D290034D81C /* nav-arrow.obj */; };
-		2EAB319E21440CEC0034D81C /* VisionAR.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EAB319C21440CEC0034D81C /* VisionAR.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2EAB319E21440CEC0034D81C /* MapboxVisionAR.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EAB319C21440CEC0034D81C /* MapboxVisionAR.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2EAB31B121440D2F0034D81C /* ARScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAB31AE21440D2E0034D81C /* ARScene.swift */; };
 		2EAB31B221440D2F0034D81C /* ARMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAB31AF21440D2F0034D81C /* ARMath.swift */; };
 		2EAB31B321440D2F0034D81C /* VisionARNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAB31AD21440D2C0034D81C /* VisionARNavigationViewController.swift */; };
@@ -23,10 +23,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2E454927214683CF0095BE31 /* VisionSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VisionSDK.framework; path = Carthage/Build/iOS/VisionSDK.framework; sourceTree = SOURCE_ROOT; };
+		2E454927214683CF0095BE31 /* MapboxVision.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapboxVision.framework; path = "../cv-assist/cv-assist-ios/Carthage/Build/iOS/MapboxVision.framework"; sourceTree = SOURCE_ROOT; };
 		2E45492921468A270095BE31 /* MapboxCoreNavigation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapboxCoreNavigation.framework; path = Carthage/Build/iOS/MapboxCoreNavigation.framework; sourceTree = "<group>"; };
-		2EAB319921440CEC0034D81C /* VisionAR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VisionAR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2EAB319C21440CEC0034D81C /* VisionAR.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VisionAR.h; sourceTree = "<group>"; };
+		2EAB319921440CEC0034D81C /* MapboxVisionAR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MapboxVisionAR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2EAB319C21440CEC0034D81C /* MapboxVisionAR.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapboxVisionAR.h; sourceTree = "<group>"; };
 		2EAB31A421440D240034D81C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2EAB31A521440D250034D81C /* NavigationRoute+Route.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NavigationRoute+Route.swift"; sourceTree = "<group>"; };
 		2EAB31A621440D270034D81C /* NavigationProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationProvider.swift; sourceTree = "<group>"; };
@@ -46,7 +46,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E45492A21468A270095BE31 /* MapboxCoreNavigation.framework in Frameworks */,
-				2E454928214683CF0095BE31 /* VisionSDK.framework in Frameworks */,
+				2E454928214683CF0095BE31 /* MapboxVision.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,7 +57,7 @@
 			isa = PBXGroup;
 			children = (
 				2E45492921468A270095BE31 /* MapboxCoreNavigation.framework */,
-				2E454927214683CF0095BE31 /* VisionSDK.framework */,
+				2E454927214683CF0095BE31 /* MapboxVision.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -65,7 +65,7 @@
 		2EAB318F21440CEC0034D81C = {
 			isa = PBXGroup;
 			children = (
-				2EAB319B21440CEC0034D81C /* VisionAR */,
+				2EAB319B21440CEC0034D81C /* MapboxVisionAR */,
 				2EAB319A21440CEC0034D81C /* Products */,
 				2E454926214683CF0095BE31 /* Frameworks */,
 			);
@@ -74,12 +74,12 @@
 		2EAB319A21440CEC0034D81C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2EAB319921440CEC0034D81C /* VisionAR.framework */,
+				2EAB319921440CEC0034D81C /* MapboxVisionAR.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		2EAB319B21440CEC0034D81C /* VisionAR */ = {
+		2EAB319B21440CEC0034D81C /* MapboxVisionAR */ = {
 			isa = PBXGroup;
 			children = (
 				2EAB31AB21440D290034D81C /* Models */,
@@ -91,9 +91,9 @@
 				2EAB31A421440D240034D81C /* Info.plist */,
 				2EAB31A521440D250034D81C /* NavigationRoute+Route.swift */,
 				2EAB31A621440D270034D81C /* NavigationProvider.swift */,
-				2EAB319C21440CEC0034D81C /* VisionAR.h */,
+				2EAB319C21440CEC0034D81C /* MapboxVisionAR.h */,
 			);
-			path = VisionAR;
+			path = MapboxVisionAR;
 			sourceTree = "<group>";
 		};
 		2EAB31AB21440D290034D81C /* Models */ = {
@@ -113,16 +113,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2EAB319E21440CEC0034D81C /* VisionAR.h in Headers */,
+				2EAB319E21440CEC0034D81C /* MapboxVisionAR.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		2EAB319821440CEC0034D81C /* VisionAR */ = {
+		2EAB319821440CEC0034D81C /* MapboxVisionAR */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2EAB31A121440CEC0034D81C /* Build configuration list for PBXNativeTarget "VisionAR" */;
+			buildConfigurationList = 2EAB31A121440CEC0034D81C /* Build configuration list for PBXNativeTarget "MapboxVisionAR" */;
 			buildPhases = (
 				2EAB319421440CEC0034D81C /* Sources */,
 				2EAB319521440CEC0034D81C /* Frameworks */,
@@ -133,9 +133,9 @@
 			);
 			dependencies = (
 			);
-			name = VisionAR;
-			productName = VisionAR;
-			productReference = 2EAB319921440CEC0034D81C /* VisionAR.framework */;
+			name = MapboxVisionAR;
+			productName = MapboxVisionAR;
+			productReference = 2EAB319921440CEC0034D81C /* MapboxVisionAR.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -152,7 +152,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 2EAB319321440CEC0034D81C /* Build configuration list for PBXProject "VisionAR" */;
+			buildConfigurationList = 2EAB319321440CEC0034D81C /* Build configuration list for PBXProject "MapboxVisionAR" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -164,7 +164,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				2EAB319821440CEC0034D81C /* VisionAR */,
+				2EAB319821440CEC0034D81C /* MapboxVisionAR */,
 			);
 		};
 /* End PBXProject section */
@@ -335,7 +335,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				INFOPLIST_FILE = VisionAR/Info.plist;
+				INFOPLIST_FILE = MapboxVisionAR/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -348,7 +348,7 @@
 					"$(PROJECT_DIR)/../Carthage/Build/iOS",
 					"$(PROJECT_DIR)/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mapbox.VisionAR;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mapbox.MapboxVisionAR;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
@@ -370,7 +370,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				INFOPLIST_FILE = VisionAR/Info.plist;
+				INFOPLIST_FILE = MapboxVisionAR/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -383,7 +383,7 @@
 					"$(PROJECT_DIR)/../Carthage/Build/iOS",
 					"$(PROJECT_DIR)/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mapbox.VisionAR;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mapbox.MapboxVisionAR;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
@@ -462,7 +462,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
-				INFOPLIST_FILE = VisionAR/Info.plist;
+				INFOPLIST_FILE = MapboxVisionAR/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -475,7 +475,7 @@
 					"$(PROJECT_DIR)/../Carthage/Build/iOS",
 					"$(PROJECT_DIR)/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mapbox.VisionAR;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mapbox.MapboxVisionAR;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 4.0;
@@ -486,7 +486,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2EAB319321440CEC0034D81C /* Build configuration list for PBXProject "VisionAR" */ = {
+		2EAB319321440CEC0034D81C /* Build configuration list for PBXProject "MapboxVisionAR" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2EAB319F21440CEC0034D81C /* Debug */,
@@ -496,7 +496,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2EAB31A121440CEC0034D81C /* Build configuration list for PBXNativeTarget "VisionAR" */ = {
+		2EAB31A121440CEC0034D81C /* Build configuration list for PBXNativeTarget "MapboxVisionAR" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2EAB31A221440CEC0034D81C /* Debug */,
