@@ -1,2 +1,2 @@
-github "mapbox/mapbox-vision-ios" "carthage"
+github "mapbox/mapbox-vision-ios" "alpha-1"
 github "mapbox/mapbox-navigation-ios" ~> 0.20.0

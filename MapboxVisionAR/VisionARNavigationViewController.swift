@@ -6,8 +6,7 @@
 import Foundation
 import UIKit
 import MetalKit
-import VisionCore
-import VisionSDK
+import MapboxVision
 import MapboxCoreNavigation
 
 /**

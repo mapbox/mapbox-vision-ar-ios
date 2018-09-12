@@ -8,8 +8,7 @@
 
 import Foundation
 import MapboxCoreNavigation
-import VisionCore
-import VisionSDK
+import MapboxVision
 
 protocol NavigationManagerDelegate: class {
     func navigationManager(_ navigationManager: NavigationManager, didUpdate route: NavigationRoute)

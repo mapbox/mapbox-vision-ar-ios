@@ -8,7 +8,7 @@
 
 import Foundation
 import MapboxDirections
-import VisionCore
+import MapboxVisionCore
 
 extension NavigationRoute {
     convenience init(route: Route) {
