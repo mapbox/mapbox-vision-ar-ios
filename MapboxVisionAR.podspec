@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "MapboxVisionAR"
-  s.version      = "0.0.1-alpha.3"
+  s.version      = "0.0.1-alpha.3.1"
   s.summary      = "Easy to use AR Navigation"
 
   s.homepage     = 'https://www.mapbox.com/vision/'

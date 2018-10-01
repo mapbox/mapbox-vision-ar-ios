@@ -117,6 +117,16 @@ public class VisionARNavigationViewController: UIViewController {
         addChildView(arView)
     }
     
+    override public func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        visionManager.start()
+    }
+    
+    override public func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        visionManager.stop()
+    }
+    
     private func addChildView(_ childView: UIView) {
         childView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(childView)
