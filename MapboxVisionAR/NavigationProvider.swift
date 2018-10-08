@@ -18,18 +18,18 @@ protocol NavigationManagerDelegate: class {
 final class NavigationManager {
     weak var delegate: NavigationManagerDelegate? {
         didSet {
-            delegate?.navigationManager(self, didUpdate: NavigationRoute(route: routeController.routeProgress.route))
+            delegate?.navigationManager(self, didUpdate: NavigationRoute(route: navigationService.routeProgress.route))
         }
     }
     
-    private let routeController: RouteController
+    private let navigationService: NavigationService
     private var routeHasChanged = true
     
-    init(routeController: RouteController) {
-        self.routeController = routeController
+    init(navigationService: NavigationService) {
+        self.navigationService = navigationService
         
-        NotificationCenter.default.addObserver(self, selector: #selector(progressDidChange), name: .routeControllerProgressDidChange, object: routeController)
-        NotificationCenter.default.addObserver(self, selector: #selector(didReroute), name: .routeControllerDidReroute, object: routeController)
+        NotificationCenter.default.addObserver(self, selector: #selector(progressDidChange), name: .routeControllerProgressDidChange, object: navigationService.router)
+        NotificationCenter.default.addObserver(self, selector: #selector(didReroute), name: .routeControllerDidReroute, object: navigationService.router)
     }
     
     @objc private func progressDidChange(_ notification: NSNotification) {

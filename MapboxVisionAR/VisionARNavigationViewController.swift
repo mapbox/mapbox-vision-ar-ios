@@ -45,13 +45,13 @@ public class VisionARNavigationViewController: UIViewController {
     Create an instance of VisionARNavigationController by specifying route controller from MapboxCoreNavigation framework.
     */
     
-    public init(routeController: RouteController? = nil) {
+    public init(navigationService: NavigationService? = nil) {
         visionViewController = visionManager.createPresentation()
         
         super.init(nibName: nil, bundle: nil)
         
-        self.routeController = routeController
-        setRouteController(routeController)
+        self.navigationService = navigationService
+        setNavigationService(navigationService)
         
         visionManager.arDelegate = self
         
@@ -84,18 +84,18 @@ public class VisionARNavigationViewController: UIViewController {
     }
     
     /**
-        Route controller from MapboxCoreNavigation framework
+        NavigationService from MapboxCoreNavigation framework
     */
     
-    public var routeController: RouteController? {
+    public var navigationService: NavigationService? {
         didSet {
-            setRouteController(routeController)
+            setNavigationService(navigationService)
         }
     }
     
-    private func setRouteController(_ routeController: RouteController?) {
-        if let routeController = routeController {
-            navigationManager = NavigationManager(routeController: routeController)
+    private func setNavigationService(_ navigationService: NavigationService?) {
+        if let navigationService = navigationService {
+            navigationManager = NavigationManager(navigationService: navigationService)
             navigationManager?.delegate = self
         } else {
             navigationManager = nil
