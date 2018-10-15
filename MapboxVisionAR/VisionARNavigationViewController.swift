@@ -37,7 +37,6 @@ public class VisionARNavigationViewController: UIViewController {
     public weak var delegate: VisionARNavigationViewControllerDelegate?
     
     private let visionManager = VisionManager.shared
-    private let visionViewController: VisionPresentationViewController
     private var renderer: ARRenderer?
     private var navigationManager: NavigationManager?
     
@@ -46,7 +45,6 @@ public class VisionARNavigationViewController: UIViewController {
     */
     
     public init(navigationService: NavigationService? = nil) {
-        visionViewController = visionManager.createPresentation()
         
         super.init(nibName: nil, bundle: nil)
         
@@ -79,7 +77,6 @@ public class VisionARNavigationViewController: UIViewController {
     */
     
     required public init?(coder aDecoder: NSCoder) {
-        visionViewController = visionManager.createPresentation()
         super.init(coder: aDecoder)
     }
     
@@ -108,12 +105,6 @@ public class VisionARNavigationViewController: UIViewController {
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        
-        visionViewController.willMove(toParentViewController: self)
-        addChildViewController(visionViewController)
-        visionViewController.didMove(toParentViewController: self)
-        
-        addChildView(visionViewController.view)
         addChildView(arView)
     }
     
@@ -124,6 +115,7 @@ public class VisionARNavigationViewController: UIViewController {
     
     override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        guard visionManager.delegate == nil else { return }
         visionManager.stop()
     }
     
@@ -146,7 +138,7 @@ public class VisionARNavigationViewController: UIViewController {
         view.framebufferOnly = false
         view.autoResizeDrawable = true
         view.contentMode = .scaleAspectFill
-        view.preferredFramesPerSecond = 20
+        view.preferredFramesPerSecond = 30
         view.isOpaque = false
         return view
     }()
