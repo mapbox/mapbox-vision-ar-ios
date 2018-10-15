@@ -115,10 +115,10 @@ class ARRenderer: NSObject, MTKViewDelegate {
         guard
         let defaultVertexFunction = library.makeFunction(name: "default_vertex_main"),
         let arrowVertexFunction = library.makeFunction(name: "arrow_vertex_main"),
-        let backgroundVertexFunction = library.makeFunction(name: "map_texture"),
+        let backgroundVertexFunction = library.makeFunction(name: "map_texture_vertex"),
         let defaultFragmentFunction = library.makeFunction(name: "default_fragment_main"),
         let arrowFragmentFunction = library.makeFunction(name: "lane_fragment_main"),
-        let backgroundFragmentFunction = library.makeFunction(name: "display_texture")
+        let backgroundFragmentFunction = library.makeFunction(name: "display_texture_fragment")
         else { throw ARRendererError.cantFindFunctions }
         
         renderPipelineDefault = try ARRenderer.makeRenderPipeline(device: device,
@@ -366,9 +366,7 @@ class ARRenderer: NSObject, MTKViewDelegate {
         
         guard let commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPass)
         else { return }
-        
-        
-        
+
         if let frame = dataProvider.getCurrentFrame(), let texture = makeTexture(from: frame) {
             commandEncoder.setRenderPipelineState(renderPipelineBackground)
             commandEncoder.setFragmentTexture(texture, index: 0)

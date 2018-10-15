@@ -62,7 +62,7 @@ struct TextureMappingVertex {
     float2 textureCoordinate;
 };
 
-vertex TextureMappingVertex map_texture(unsigned int vertex_id [[ vertex_id ]]) {
+vertex TextureMappingVertex map_texture_vertex(unsigned int vertex_id [[ vertex_id ]]) {
     float4x4 renderedCoordinates = float4x4(float4( -1.0, -1.0, 0.0, 1.0 ),
                                             float4(  1.0, -1.0, 0.0, 1.0 ),
                                             float4( -1.0,  1.0, 0.0, 1.0 ),
@@ -155,12 +155,9 @@ fragment float4 lane_fragment_main(VertexOut fragmentIn [[stage_in]],
     return float4(calculateLight(fragmentIn, uniforms), uniforms.opacity * fragmentIn.texCoords.y);
 }
 
-fragment half4 display_texture(TextureMappingVertex mappingVertex [[ stage_in ]],
+fragment half4 display_texture_fragment(TextureMappingVertex mappingVertex [[ stage_in ]],
                               texture2d<float, access::sample> texture [[ texture(0) ]]) {
     constexpr sampler s(address::clamp_to_edge, filter::linear);
     
     return half4(texture.sample(s, mappingVertex.textureCoordinate));
 }
-
-
-
