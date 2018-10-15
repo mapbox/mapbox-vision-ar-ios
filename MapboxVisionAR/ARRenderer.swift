@@ -63,7 +63,9 @@ class ARRenderer: NSObject, MTKViewDelegate {
     
     private let dataProvider: ARDataProvider
     private let device: MTLDevice
+    #if !targetEnvironment(simulator)
     private var textureCache: CVMetalTextureCache?
+    #endif
     private let commandQueue: MTLCommandQueue
     private let vertexDescriptor: MDLVertexDescriptor = ARRenderer.makeVertexDescriptor()
     private let renderPipelineDefault: MTLRenderPipelineState
@@ -102,10 +104,11 @@ class ARRenderer: NSObject, MTKViewDelegate {
         self.dataProvider = dataProvider
         self.arrowControlPoints = []
         
+        #if !targetEnvironment(simulator)
         guard CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, device, nil, &textureCache) == kCVReturnSuccess else {
             throw ARRendererError.cantCreateTextureCache
         }
-        
+        #endif
         guard let commandQueue = device.makeCommandQueue() else { throw ARRendererError.cantCreateCommandQueue }
         self.commandQueue = commandQueue
         self.commandQueue.label = "com.mapbox.ARRenderer"
@@ -387,11 +390,15 @@ class ARRenderer: NSObject, MTKViewDelegate {
     }
     
     private func makeTexture(from buffer: CVPixelBuffer) -> MTLTexture? {
+        #if !targetEnvironment(simulator)
         var imageTexture: CVMetalTexture?
         guard let textureCache = textureCache,
         CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault, textureCache, buffer, nil, .bgra8Unorm, CVPixelBufferGetWidth(buffer), CVPixelBufferGetHeight(buffer), 0, &imageTexture) == kCVReturnSuccess
         else { return nil }
         return CVMetalTextureGetTexture(imageTexture!)
+        #else
+        return nil
+        #endif
     }
     
     private func updateLane() {
