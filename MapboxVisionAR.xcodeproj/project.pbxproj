@@ -20,6 +20,7 @@
 		2EAB31B521440D2F0034D81C /* ARRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAB31AC21440D2B0034D81C /* ARRenderer.swift */; };
 		2EAB31B621440D2F0034D81C /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 2EAB31A721440D280034D81C /* Shaders.metal */; };
 		2EAB31B721440D2F0034D81C /* NavigationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAB31A621440D270034D81C /* NavigationProvider.swift */; };
+		B532EE092170AA0600B172FA /* MapboxVisionCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B532EE082170AA0600B172FA /* MapboxVisionCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		2EAB31AD21440D2C0034D81C /* VisionARNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VisionARNavigationViewController.swift; sourceTree = "<group>"; };
 		2EAB31AE21440D2E0034D81C /* ARScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARScene.swift; sourceTree = "<group>"; };
 		2EAB31AF21440D2F0034D81C /* ARMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARMath.swift; sourceTree = "<group>"; };
+		B532EE082170AA0600B172FA /* MapboxVisionCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MapboxVisionCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B532EE092170AA0600B172FA /* MapboxVisionCore.framework in Frameworks */,
 				2E45492A21468A270095BE31 /* MapboxCoreNavigation.framework in Frameworks */,
 				2E454928214683CF0095BE31 /* MapboxVision.framework in Frameworks */,
 			);
@@ -56,6 +59,7 @@
 		2E454926214683CF0095BE31 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B532EE082170AA0600B172FA /* MapboxVisionCore.framework */,
 				2E45492921468A270095BE31 /* MapboxCoreNavigation.framework */,
 				2E454927214683CF0095BE31 /* MapboxVision.framework */,
 			);

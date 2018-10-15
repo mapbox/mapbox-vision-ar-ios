@@ -63,10 +63,12 @@ class ARRenderer: NSObject, MTKViewDelegate {
     
     private let dataProvider: ARDataProvider
     private let device: MTLDevice
+    private var textureCache: CVMetalTextureCache?
     private let commandQueue: MTLCommandQueue
     private let vertexDescriptor: MDLVertexDescriptor = ARRenderer.makeVertexDescriptor()
     private let renderPipelineDefault: MTLRenderPipelineState
     private let renderPipelineArrow: MTLRenderPipelineState
+    private let renderPipelineBackground: MTLRenderPipelineState
     private let samplerStateDefault: MTLSamplerState
     private let depthStencilStateDefault: MTLDepthStencilState
     
@@ -89,6 +91,7 @@ class ARRenderer: NSObject, MTKViewDelegate {
     
     enum ARRendererError: LocalizedError {
         case cantCreateCommandQueue
+        case cantCreateTextureCache
         case cantFindMeshFile(String)
         case meshFileIsEmpty(String)
         case cantFindFunctions
@@ -99,6 +102,10 @@ class ARRenderer: NSObject, MTKViewDelegate {
         self.dataProvider = dataProvider
         self.arrowControlPoints = []
         
+        guard CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, device, nil, &textureCache) == kCVReturnSuccess else {
+            throw ARRendererError.cantCreateTextureCache
+        }
+        
         guard let commandQueue = device.makeCommandQueue() else { throw ARRendererError.cantCreateCommandQueue }
         self.commandQueue = commandQueue
         self.commandQueue.label = "com.mapbox.ARRenderer"
@@ -108,8 +115,10 @@ class ARRenderer: NSObject, MTKViewDelegate {
         guard
         let defaultVertexFunction = library.makeFunction(name: "default_vertex_main"),
         let arrowVertexFunction = library.makeFunction(name: "arrow_vertex_main"),
+        let backgroundVertexFunction = library.makeFunction(name: "map_texture"),
         let defaultFragmentFunction = library.makeFunction(name: "default_fragment_main"),
-        let arrowFragmentFunction = library.makeFunction(name: "lane_fragment_main")
+        let arrowFragmentFunction = library.makeFunction(name: "lane_fragment_main"),
+        let backgroundFragmentFunction = library.makeFunction(name: "display_texture")
         else { throw ARRendererError.cantFindFunctions }
         
         renderPipelineDefault = try ARRenderer.makeRenderPipeline(device: device,
@@ -125,6 +134,14 @@ class ARRenderer: NSObject, MTKViewDelegate {
                                                                 fragmentFunction: arrowFragmentFunction,
                                                                 colorPixelFormat: colorPixelFormat,
                                                                 depthStencilPixelFormat: depthStencilPixelFormat)
+        
+        
+        renderPipelineBackground = try ARRenderer.makeRenderPipeline(device: device,
+                                                                     vertexDescriptor: nil,
+                                                                     vertexFunction: backgroundVertexFunction,
+                                                                     fragmentFunction: backgroundFragmentFunction,
+                                                                     colorPixelFormat: colorPixelFormat,
+                                                                     depthStencilPixelFormat: depthStencilPixelFormat)
         
         samplerStateDefault = ARRenderer.makeDefaultSamplerState(device: device)
         depthStencilStateDefault = ARRenderer.makeDefaultDepthStencilState(device: device)
@@ -195,7 +212,7 @@ class ARRenderer: NSObject, MTKViewDelegate {
     }
     
     static func makeRenderPipeline(device: MTLDevice,
-                                   vertexDescriptor: MDLVertexDescriptor,
+                                   vertexDescriptor: MDLVertexDescriptor?,
                                    vertexFunction: MTLFunction,
                                    fragmentFunction: MTLFunction,
                                    colorPixelFormat: MTLPixelFormat,
@@ -215,8 +232,10 @@ class ARRenderer: NSObject, MTKViewDelegate {
         pipeline.colorAttachments[0].destinationAlphaBlendFactor = MTLBlendFactor.oneMinusSourceAlpha
         pipeline.depthAttachmentPixelFormat = depthStencilPixelFormat
         
-        let mtlVertexDescriptor = MTKMetalVertexDescriptorFromModelIO(vertexDescriptor)
-        pipeline.vertexDescriptor = mtlVertexDescriptor
+        if let vertexDescriptor = vertexDescriptor {
+            let mtlVertexDescriptor = MTKMetalVertexDescriptorFromModelIO(vertexDescriptor)
+            pipeline.vertexDescriptor = mtlVertexDescriptor
+        }
         
         return try device.makeRenderPipelineState(descriptor: pipeline)
     }
@@ -348,6 +367,14 @@ class ARRenderer: NSObject, MTKViewDelegate {
         guard let commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPass)
         else { return }
         
+        
+        
+        if let frame = dataProvider.getCurrentFrame(), let texture = makeTexture(from: frame) {
+            commandEncoder.setRenderPipelineState(renderPipelineBackground)
+            commandEncoder.setFragmentTexture(texture, index: 0)
+            commandEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4, instanceCount: 1)
+        }
+        
         commandEncoder.setFrontFacing(.counterClockwise)
         commandEncoder.setCullMode(.back)
         commandEncoder.setDepthStencilState(depthStencilStateDefault)
@@ -359,6 +386,14 @@ class ARRenderer: NSObject, MTKViewDelegate {
         commandEncoder.endEncoding()
         commandBuffer.present(drawable)
         commandBuffer.commit()
+    }
+    
+    private func makeTexture(from buffer: CVPixelBuffer) -> MTLTexture? {
+        var imageTexture: CVMetalTexture?
+        guard let textureCache = textureCache,
+        CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault, textureCache, buffer, nil, .bgra8Unorm, CVPixelBufferGetWidth(buffer), CVPixelBufferGetHeight(buffer), 0, &imageTexture) == kCVReturnSuccess
+        else { return nil }
+        return CVMetalTextureGetTexture(imageTexture!)
     }
     
     private func updateLane() {
