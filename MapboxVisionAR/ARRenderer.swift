@@ -49,19 +49,14 @@ struct LaneFragmentUniforms {
     var baseColor = float4(1, 1, 1, 1)
 };
 
-struct TextureMappingVertexIn {
-    let position: float3
-    let textureCoordinates: float2
-};
-
-private let textureMappingVertices: [TextureMappingVertexIn] = [
-    TextureMappingVertexIn(position: float3(-1.0, -1.0, 0.0), textureCoordinates: float2(0.0, 1.0)),
-    TextureMappingVertexIn(position: float3(1.0, -1.0, 0.0), textureCoordinates: float2(1.0, 1.0)),
-    TextureMappingVertexIn(position: float3(-1.0,  1.0, 0.0), textureCoordinates: float2(0.0, 0.0)),
+private let textureMappingVertices: [Float] = [
+    -1.0, -1.0, 0.0,    0.0, 1.0,
+    1.0, -1.0, 0.0,     1.0, 1.0,
+    -1.0,  1.0, 0.0,    0.0, 0.0,
     
-    TextureMappingVertexIn(position: float3(1.0,  1.0, 0.0), textureCoordinates: float2(1.0, 0.0)),
-    TextureMappingVertexIn(position: float3(1.0, -1.0, 0.0), textureCoordinates: float2(1.0, 1.0)),
-    TextureMappingVertexIn(position: float3(-1.0,  1.0, 0.0), textureCoordinates: float2(0.0, 0.0)),
+    1.0,  1.0, 0.0,     1.0, 0.0,
+    1.0, -1.0, 0.0,     1.0, 1.0,
+    -1.0,  1.0, 0.0,    0.0, 0.0
 ]
 
 /* Coordinate system:
@@ -165,7 +160,7 @@ class ARRenderer: NSObject, MTKViewDelegate {
         samplerStateDefault = ARRenderer.makeDefaultSamplerState(device: device)
         depthStencilStateDefault = ARRenderer.makeDefaultDepthStencilState(device: device)
         
-        backgroundVertexBuffer = device.makeBuffer(bytes: textureMappingVertices, length: MemoryLayout<TextureMappingVertexIn>.stride * textureMappingVertices.count, options: [])!
+        backgroundVertexBuffer = device.makeBuffer(bytes: textureMappingVertices, length: textureMappingVertices.count * MemoryLayout<Float>.size, options: [])!
             
         super.init()
     }
