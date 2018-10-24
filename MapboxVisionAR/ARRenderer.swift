@@ -50,18 +50,18 @@ struct LaneFragmentUniforms {
 };
 
 struct TextureMappingVertexIn {
-    var position: float4
-    var texCoords: float2
+    let position: float3
+    let textureCoordinates: float2
 };
 
-private var textureMappingVertices: [TextureMappingVertexIn] = [
-    TextureMappingVertexIn(position: float4(-1.0, -1.0, 0.0, 1.0), texCoords: float2(0.0, 1.0)),
-    TextureMappingVertexIn(position: float4(1.0, -1.0, 0.0, 1.0), texCoords: float2(1.0, 1.0)),
-    TextureMappingVertexIn(position: float4(-1.0,  1.0, 0.0, 1.0), texCoords: float2(0.0, 0.0)),
+private let textureMappingVertices: [TextureMappingVertexIn] = [
+    TextureMappingVertexIn(position: float3(-1.0, -1.0, 0.0), textureCoordinates: float2(0.0, 1.0)),
+    TextureMappingVertexIn(position: float3(1.0, -1.0, 0.0), textureCoordinates: float2(1.0, 1.0)),
+    TextureMappingVertexIn(position: float3(-1.0,  1.0, 0.0), textureCoordinates: float2(0.0, 0.0)),
     
-    TextureMappingVertexIn(position: float4(1.0,  1.0, 0.0, 1.0), texCoords: float2(1.0, 0.0)),
-    TextureMappingVertexIn(position: float4(1.0, -1.0, 0.0, 1.0), texCoords: float2(1.0, 1.0)),
-    TextureMappingVertexIn(position: float4(-1.0,  1.0, 0.0, 1.0), texCoords: float2(0.0, 0.0)),
+    TextureMappingVertexIn(position: float3(1.0,  1.0, 0.0), textureCoordinates: float2(1.0, 0.0)),
+    TextureMappingVertexIn(position: float3(1.0, -1.0, 0.0), textureCoordinates: float2(1.0, 1.0)),
+    TextureMappingVertexIn(position: float3(-1.0,  1.0, 0.0), textureCoordinates: float2(0.0, 0.0)),
 ]
 
 /* Coordinate system:
@@ -233,17 +233,17 @@ class ARRenderer: NSObject, MTKViewDelegate {
         let vertexDescriptor = MDLVertexDescriptor()
         vertexDescriptor.attributes[0] = MDLVertexAttribute(
             name: MDLVertexAttributePosition,
-            format: .float4,
+            format: .float3,
             offset: 0,
             bufferIndex: 0
         )
         vertexDescriptor.attributes[1] = MDLVertexAttribute(
             name: MDLVertexAttributeTextureCoordinate,
             format: .float2,
-            offset: MemoryLayout<Float>.size * 4,
+            offset: MemoryLayout<Float>.size * 3,
             bufferIndex: 0
         )
-        vertexDescriptor.layouts[0] = MDLVertexBufferLayout(stride: MemoryLayout<Float>.size * 6)
+        vertexDescriptor.layouts[0] = MDLVertexBufferLayout(stride: MemoryLayout<Float>.size * 5)
         return vertexDescriptor
     }
     
@@ -403,9 +403,9 @@ class ARRenderer: NSObject, MTKViewDelegate {
 
         if let frame = dataProvider.getCurrentFrame(), let texture = makeTexture(from: frame) {
             commandEncoder.setRenderPipelineState(renderPipelineBackground)
-            commandEncoder.setVertexBytes(&textureMappingVertices, length: MemoryLayout<TextureMappingVertexIn>.size * textureMappingVertices.count, index: 0)
+            commandEncoder.setVertexBytes(textureMappingVertices, length: MemoryLayout<TextureMappingVertexIn>.size * textureMappingVertices.count, index: 0)
             commandEncoder.setFragmentTexture(texture, index: 0)
-            commandEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6, instanceCount: 2)
+            commandEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: textureMappingVertices.count)
         }
         
         commandEncoder.setFrontFacing(.counterClockwise)

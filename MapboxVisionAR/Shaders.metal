@@ -59,18 +59,18 @@ struct LaneFragmentUniforms {
 
 struct TextureMappingVertex {
     float4 position [[position]];
-    float2 texCoords;
+    float2 textureCoordinates;
 };
 
 struct TextureMappingVertexIn {
-    float4 position [[attribute(0)]];
-    float2 texCoords [[attribute(1)]];
+    float3 position [[attribute(0)]];
+    float2 textureCoordinates [[attribute(1)]];
 };
 
 vertex TextureMappingVertex map_texture_vertex(TextureMappingVertexIn vertexIn [[stage_in]]) {
     TextureMappingVertex outVertex;
-    outVertex.position = vertexIn.position;
-    outVertex.texCoords = vertexIn.texCoords;
+    outVertex.position = float4(vertexIn.position.xyz, 0.0);
+    outVertex.textureCoordinates = vertexIn.textureCoordinates;
     return outVertex;
 }
 
@@ -154,5 +154,5 @@ fragment half4 display_texture_fragment(TextureMappingVertex mappingVertex [[ st
                               texture2d<float, access::sample> texture [[ texture(0) ]]) {
     constexpr sampler s(address::clamp_to_edge, filter::linear);
     
-    return half4(texture.sample(s, mappingVertex.texCoords));
+    return half4(texture.sample(s, mappingVertex.textureCoordinates));
 }
