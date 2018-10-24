@@ -105,6 +105,7 @@ class ARRenderer: NSObject, MTKViewDelegate {
     private var arrowMidPoint = float3(0, 0, 0)
     
     private var arrowControlPoints: [float3]
+    private let backgroundVertexBuffer: MTLBuffer
     
     enum ARRendererError: LocalizedError {
         case cantCreateCommandQueue
@@ -154,7 +155,7 @@ class ARRenderer: NSObject, MTKViewDelegate {
                                                                 depthStencilPixelFormat: depthStencilPixelFormat)
         
         
-        renderPipelineBackground = try ARRenderer.makeRenderPipeline(device: device,
+        renderPipelineBackground = try ARRenderer.makeRenderBackgroundPipeline(device: device,
                                                                      vertexDescriptor: ARRenderer.makeTextureMappingVertexDescriptor(),
                                                                      vertexFunction: backgroundVertexFunction,
                                                                      fragmentFunction: backgroundFragmentFunction,
@@ -163,6 +164,8 @@ class ARRenderer: NSObject, MTKViewDelegate {
         
         samplerStateDefault = ARRenderer.makeDefaultSamplerState(device: device)
         depthStencilStateDefault = ARRenderer.makeDefaultDepthStencilState(device: device)
+        
+        backgroundVertexBuffer = device.makeBuffer(bytes: textureMappingVertices, length: MemoryLayout<TextureMappingVertexIn>.stride * textureMappingVertices.count, options: [])!
             
         super.init()
     }
@@ -229,22 +232,40 @@ class ARRenderer: NSObject, MTKViewDelegate {
         return vertexDescriptor
     }
     
-    static func makeTextureMappingVertexDescriptor() -> MDLVertexDescriptor {
-        let vertexDescriptor = MDLVertexDescriptor()
-        vertexDescriptor.attributes[0] = MDLVertexAttribute(
-            name: MDLVertexAttributePosition,
-            format: .float3,
-            offset: 0,
-            bufferIndex: 0
-        )
-        vertexDescriptor.attributes[1] = MDLVertexAttribute(
-            name: MDLVertexAttributeTextureCoordinate,
-            format: .float2,
-            offset: MemoryLayout<Float>.size * 3,
-            bufferIndex: 0
-        )
-        vertexDescriptor.layouts[0] = MDLVertexBufferLayout(stride: MemoryLayout<Float>.size * 5)
+    static func makeTextureMappingVertexDescriptor() -> MTLVertexDescriptor {
+        let vertexDescriptor = MTLVertexDescriptor()
+        
+        vertexDescriptor.attributes[0].format = .float3
+        vertexDescriptor.attributes[0].offset = 0
+        vertexDescriptor.attributes[0].bufferIndex = 0
+        
+        vertexDescriptor.attributes[1].format = .float2
+        vertexDescriptor.attributes[1].offset = MemoryLayout<Float>.size * 3
+        vertexDescriptor.attributes[1].bufferIndex = 0
+        
+        vertexDescriptor.layouts[0].stride = MemoryLayout<Float>.size * 5
+        vertexDescriptor.layouts[0].stepFunction = .perVertex
+        
         return vertexDescriptor
+    }
+    
+    static func makeRenderBackgroundPipeline(device: MTLDevice,
+                                   vertexDescriptor: MTLVertexDescriptor,
+                                   vertexFunction: MTLFunction,
+                                   fragmentFunction: MTLFunction,
+                                   colorPixelFormat: MTLPixelFormat,
+                                   depthStencilPixelFormat: MTLPixelFormat) throws -> MTLRenderPipelineState {
+        
+        let pipeline = MTLRenderPipelineDescriptor()
+        pipeline.vertexFunction = vertexFunction
+        pipeline.fragmentFunction = fragmentFunction
+        
+        pipeline.colorAttachments[0].pixelFormat = colorPixelFormat
+        pipeline.depthAttachmentPixelFormat = depthStencilPixelFormat
+        
+        pipeline.vertexDescriptor = vertexDescriptor
+        
+        return try device.makeRenderPipelineState(descriptor: pipeline)
     }
     
     static func makeRenderPipeline(device: MTLDevice,
@@ -311,7 +332,13 @@ class ARRenderer: NSObject, MTKViewDelegate {
     }
     
     func drawScene(commandEncoder: MTLRenderCommandEncoder) {
-
+        
+        commandEncoder.setFrontFacing(.counterClockwise)
+        commandEncoder.setCullMode(.back)
+        commandEncoder.setDepthStencilState(depthStencilStateDefault)
+        commandEncoder.setRenderPipelineState(renderPipelineDefault)
+        commandEncoder.setFragmentSamplerState(samplerStateDefault, index: 0)
+        
         let viewMatrix = makeViewMatrix(trans: scene.camera.position, rot: scene.camera.rotation)
         viewProjectionMatrix = scene.camera.projectionMatrix() * viewMatrix
         
@@ -403,18 +430,14 @@ class ARRenderer: NSObject, MTKViewDelegate {
 
         if let frame = dataProvider.getCurrentFrame(), let texture = makeTexture(from: frame) {
             commandEncoder.setRenderPipelineState(renderPipelineBackground)
-            commandEncoder.setVertexBytes(textureMappingVertices, length: MemoryLayout<TextureMappingVertexIn>.size * textureMappingVertices.count, index: 0)
+            commandEncoder.setVertexBuffer(backgroundVertexBuffer, offset: 0, index: 0)
             commandEncoder.setFragmentTexture(texture, index: 0)
             commandEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: textureMappingVertices.count)
         }
         
-        commandEncoder.setFrontFacing(.counterClockwise)
-        commandEncoder.setCullMode(.back)
-        commandEncoder.setDepthStencilState(depthStencilStateDefault)
-        commandEncoder.setRenderPipelineState(renderPipelineDefault)
-        commandEncoder.setFragmentSamplerState(samplerStateDefault, index: 0)
-        
-        drawScene(commandEncoder: commandEncoder)
+        if (dataProvider.getARRouteData().isValid) {
+            drawScene(commandEncoder: commandEncoder)
+        }
         
         commandEncoder.endEncoding()
         commandBuffer.present(drawable)
