@@ -69,7 +69,7 @@ struct TextureMappingVertexIn {
 
 vertex TextureMappingVertex map_texture_vertex(TextureMappingVertexIn vertexIn [[stage_in]]) {
     TextureMappingVertex outVertex;
-    outVertex.position = float4(vertexIn.position.xyz, 0.0);
+    outVertex.position = float4(vertexIn.position.xyz, 1.0);
     outVertex.textureCoordinates = vertexIn.textureCoordinates;
     return outVertex;
 }
