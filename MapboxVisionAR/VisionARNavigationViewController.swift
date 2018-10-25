@@ -139,7 +139,7 @@ public class VisionARNavigationViewController: UIViewController {
         view.autoResizeDrawable = true
         view.contentMode = .scaleAspectFill
         view.preferredFramesPerSecond = 30
-        view.isOpaque = false
+        view.isOpaque = true
         return view
     }()
 }
