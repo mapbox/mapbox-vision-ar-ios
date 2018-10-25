@@ -50,12 +50,13 @@ struct LaneFragmentUniforms {
 };
 
 private let textureMappingVertices: [Float] = [
+//   X     Y    Z       U    V
     -1.0, -1.0, 0.0,    0.0, 1.0,
-    1.0, -1.0, 0.0,     1.0, 1.0,
+     1.0, -1.0, 0.0,    1.0, 1.0,
     -1.0,  1.0, 0.0,    0.0, 0.0,
     
-    1.0,  1.0, 0.0,     1.0, 0.0,
-    1.0, -1.0, 0.0,     1.0, 1.0,
+     1.0,  1.0, 0.0,    1.0, 0.0,
+     1.0, -1.0, 0.0,    1.0, 1.0,
     -1.0,  1.0, 0.0,    0.0, 0.0
 ]
 
@@ -105,6 +106,7 @@ class ARRenderer: NSObject, MTKViewDelegate {
     enum ARRendererError: LocalizedError {
         case cantCreateCommandQueue
         case cantCreateTextureCache
+        case cantCreateBuffer
         case cantFindMeshFile(String)
         case meshFileIsEmpty(String)
         case cantFindFunctions
@@ -151,16 +153,19 @@ class ARRenderer: NSObject, MTKViewDelegate {
         
         
         renderPipelineBackground = try ARRenderer.makeRenderBackgroundPipeline(device: device,
-                                                                     vertexDescriptor: ARRenderer.makeTextureMappingVertexDescriptor(),
-                                                                     vertexFunction: backgroundVertexFunction,
-                                                                     fragmentFunction: backgroundFragmentFunction,
-                                                                     colorPixelFormat: colorPixelFormat,
-                                                                     depthStencilPixelFormat: depthStencilPixelFormat)
+                                                                               vertexDescriptor: ARRenderer.makeTextureMappingVertexDescriptor(),
+                                                                               vertexFunction: backgroundVertexFunction,
+                                                                               fragmentFunction: backgroundFragmentFunction,
+                                                                               colorPixelFormat: colorPixelFormat,
+                                                                               depthStencilPixelFormat: depthStencilPixelFormat)
         
         samplerStateDefault = ARRenderer.makeDefaultSamplerState(device: device)
         depthStencilStateDefault = ARRenderer.makeDefaultDepthStencilState(device: device)
         
-        backgroundVertexBuffer = device.makeBuffer(bytes: textureMappingVertices, length: textureMappingVertices.count * MemoryLayout<Float>.size, options: [])!
+        guard let buffer = device.makeBuffer(bytes: textureMappingVertices, length: textureMappingVertices.count * MemoryLayout<Float>.size, options: []) else {
+            throw ARRendererError.cantCreateBuffer
+        }
+        backgroundVertexBuffer = buffer
             
         super.init()
     }
