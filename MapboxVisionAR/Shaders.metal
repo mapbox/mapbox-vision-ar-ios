@@ -57,6 +57,23 @@ struct LaneFragmentUniforms {
     float4 baseColor;
 };
 
+struct TextureMappingVertex {
+    float4 position [[position]];
+    float2 textureCoordinates;
+};
+
+struct TextureMappingVertexIn {
+    float3 position [[attribute(0)]];
+    float2 textureCoordinates [[attribute(1)]];
+};
+
+vertex TextureMappingVertex map_texture_vertex(TextureMappingVertexIn vertexIn [[stage_in]]) {
+    TextureMappingVertex outVertex;
+    outVertex.position = float4(vertexIn.position.xyz, 1.0);
+    outVertex.textureCoordinates = vertexIn.textureCoordinates;
+    return outVertex;
+}
+
 
 vertex VertexOut default_vertex_main(VertexIn vertexIn [[stage_in]], constant DefaultVertexUniforms &uniforms [[buffer(1)]])
 {
@@ -133,3 +150,9 @@ fragment float4 lane_fragment_main(VertexOut fragmentIn [[stage_in]],
     return float4(calculateLight(fragmentIn, uniforms), uniforms.opacity * fragmentIn.texCoords.y);
 }
 
+fragment half4 display_texture_fragment(TextureMappingVertex mappingVertex [[ stage_in ]],
+                              texture2d<float, access::sample> texture [[ texture(0) ]]) {
+    constexpr sampler s(address::clamp_to_edge, filter::linear);
+    
+    return half4(texture.sample(s, mappingVertex.textureCoordinates));
+}
