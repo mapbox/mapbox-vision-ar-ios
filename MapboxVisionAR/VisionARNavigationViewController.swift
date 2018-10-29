@@ -108,10 +108,18 @@ public class VisionARNavigationViewController: UIViewController {
         addChildView(arView)
     }
     
+    /**
+     :nodoc:
+     */
+    
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         visionManager.start()
     }
+    
+    /**
+     :nodoc:
+     */
     
     override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
