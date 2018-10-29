@@ -108,10 +108,18 @@ public class VisionARNavigationViewController: UIViewController {
         addChildView(arView)
     }
     
+    /**
+     :nodoc:
+     */
+    
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         visionManager.start()
     }
+    
+    /**
+     :nodoc:
+     */
     
     override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -139,7 +147,7 @@ public class VisionARNavigationViewController: UIViewController {
         view.autoResizeDrawable = true
         view.contentMode = .scaleAspectFill
         view.preferredFramesPerSecond = 30
-        view.isOpaque = false
+        view.isOpaque = true
         return view
     }()
 }

@@ -49,19 +49,15 @@ struct LaneFragmentUniforms {
     var baseColor = float4(1, 1, 1, 1)
 };
 
-struct TextureMappingVertexIn {
-    let position: float3
-    let textureCoordinates: float2
-};
-
-private let textureMappingVertices: [TextureMappingVertexIn] = [
-    TextureMappingVertexIn(position: float3(-1.0, -1.0, 0.0), textureCoordinates: float2(0.0, 1.0)),
-    TextureMappingVertexIn(position: float3(1.0, -1.0, 0.0), textureCoordinates: float2(1.0, 1.0)),
-    TextureMappingVertexIn(position: float3(-1.0,  1.0, 0.0), textureCoordinates: float2(0.0, 0.0)),
+private let textureMappingVertices: [Float] = [
+//   X     Y    Z       U    V
+    -1.0, -1.0, 0.0,    0.0, 1.0,
+     1.0, -1.0, 0.0,    1.0, 1.0,
+    -1.0,  1.0, 0.0,    0.0, 0.0,
     
-    TextureMappingVertexIn(position: float3(1.0,  1.0, 0.0), textureCoordinates: float2(1.0, 0.0)),
-    TextureMappingVertexIn(position: float3(1.0, -1.0, 0.0), textureCoordinates: float2(1.0, 1.0)),
-    TextureMappingVertexIn(position: float3(-1.0,  1.0, 0.0), textureCoordinates: float2(0.0, 0.0)),
+     1.0,  1.0, 0.0,    1.0, 0.0,
+     1.0, -1.0, 0.0,    1.0, 1.0,
+    -1.0,  1.0, 0.0,    0.0, 0.0
 ]
 
 /* Coordinate system:
@@ -104,11 +100,12 @@ class ARRenderer: NSObject, MTKViewDelegate {
     private var arrowEndPoint = float3(0, 0, 0)
     private var arrowMidPoint = float3(0, 0, 0)
     
-    private var arrowControlPoints: [float3]
+    private let backgroundVertexBuffer: MTLBuffer
     
     enum ARRendererError: LocalizedError {
         case cantCreateCommandQueue
         case cantCreateTextureCache
+        case cantCreateBuffer
         case cantFindMeshFile(String)
         case meshFileIsEmpty(String)
         case cantFindFunctions
@@ -117,7 +114,6 @@ class ARRenderer: NSObject, MTKViewDelegate {
     init(device: MTLDevice, dataProvider: ARDataProvider, colorPixelFormat: MTLPixelFormat, depthStencilPixelFormat: MTLPixelFormat) throws {
         self.device = device
         self.dataProvider = dataProvider
-        self.arrowControlPoints = []
         
         #if !targetEnvironment(simulator)
         guard CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, device, nil, &textureCache) == kCVReturnSuccess else {
@@ -154,15 +150,20 @@ class ARRenderer: NSObject, MTKViewDelegate {
                                                                 depthStencilPixelFormat: depthStencilPixelFormat)
         
         
-        renderPipelineBackground = try ARRenderer.makeRenderPipeline(device: device,
-                                                                     vertexDescriptor: ARRenderer.makeTextureMappingVertexDescriptor(),
-                                                                     vertexFunction: backgroundVertexFunction,
-                                                                     fragmentFunction: backgroundFragmentFunction,
-                                                                     colorPixelFormat: colorPixelFormat,
-                                                                     depthStencilPixelFormat: depthStencilPixelFormat)
+        renderPipelineBackground = try ARRenderer.makeRenderBackgroundPipeline(device: device,
+                                                                               vertexDescriptor: ARRenderer.makeTextureMappingVertexDescriptor(),
+                                                                               vertexFunction: backgroundVertexFunction,
+                                                                               fragmentFunction: backgroundFragmentFunction,
+                                                                               colorPixelFormat: colorPixelFormat,
+                                                                               depthStencilPixelFormat: depthStencilPixelFormat)
         
         samplerStateDefault = ARRenderer.makeDefaultSamplerState(device: device)
         depthStencilStateDefault = ARRenderer.makeDefaultDepthStencilState(device: device)
+        
+        guard let buffer = device.makeBuffer(bytes: textureMappingVertices, length: textureMappingVertices.count * MemoryLayout<Float>.size, options: []) else {
+            throw ARRendererError.cantCreateBuffer
+        }
+        backgroundVertexBuffer = buffer
             
         super.init()
     }
@@ -229,22 +230,40 @@ class ARRenderer: NSObject, MTKViewDelegate {
         return vertexDescriptor
     }
     
-    static func makeTextureMappingVertexDescriptor() -> MDLVertexDescriptor {
-        let vertexDescriptor = MDLVertexDescriptor()
-        vertexDescriptor.attributes[0] = MDLVertexAttribute(
-            name: MDLVertexAttributePosition,
-            format: .float3,
-            offset: 0,
-            bufferIndex: 0
-        )
-        vertexDescriptor.attributes[1] = MDLVertexAttribute(
-            name: MDLVertexAttributeTextureCoordinate,
-            format: .float2,
-            offset: MemoryLayout<Float>.size * 3,
-            bufferIndex: 0
-        )
-        vertexDescriptor.layouts[0] = MDLVertexBufferLayout(stride: MemoryLayout<Float>.size * 5)
+    static func makeTextureMappingVertexDescriptor() -> MTLVertexDescriptor {
+        let vertexDescriptor = MTLVertexDescriptor()
+        
+        vertexDescriptor.attributes[0].format = .float3
+        vertexDescriptor.attributes[0].offset = 0
+        vertexDescriptor.attributes[0].bufferIndex = 0
+        
+        vertexDescriptor.attributes[1].format = .float2
+        vertexDescriptor.attributes[1].offset = MemoryLayout<Float>.size * 3
+        vertexDescriptor.attributes[1].bufferIndex = 0
+        
+        vertexDescriptor.layouts[0].stride = MemoryLayout<Float>.size * 5
+        vertexDescriptor.layouts[0].stepFunction = .perVertex
+        
         return vertexDescriptor
+    }
+    
+    static func makeRenderBackgroundPipeline(device: MTLDevice,
+                                   vertexDescriptor: MTLVertexDescriptor,
+                                   vertexFunction: MTLFunction,
+                                   fragmentFunction: MTLFunction,
+                                   colorPixelFormat: MTLPixelFormat,
+                                   depthStencilPixelFormat: MTLPixelFormat) throws -> MTLRenderPipelineState {
+        
+        let pipeline = MTLRenderPipelineDescriptor()
+        pipeline.vertexFunction = vertexFunction
+        pipeline.fragmentFunction = fragmentFunction
+        
+        pipeline.colorAttachments[0].pixelFormat = colorPixelFormat
+        pipeline.depthAttachmentPixelFormat = depthStencilPixelFormat
+        
+        pipeline.vertexDescriptor = vertexDescriptor
+        
+        return try device.makeRenderPipelineState(descriptor: pipeline)
     }
     
     static func makeRenderPipeline(device: MTLDevice,
@@ -306,12 +325,16 @@ class ARRenderer: NSObject, MTKViewDelegate {
         scene.camera.rotation = simd_quatf.byAxis(camParams.roll - Float.pi / 2, -camParams.pitch, 0)
         
         scene.camera.position = float3(0, camParams.height, 0);
-        
-        updateLane()
     }
     
-    func drawScene(commandEncoder: MTLRenderCommandEncoder) {
-
+    func drawScene(commandEncoder: MTLRenderCommandEncoder, routeData: ARRouteData) {
+        
+        commandEncoder.setFrontFacing(.counterClockwise)
+        commandEncoder.setCullMode(.back)
+        commandEncoder.setDepthStencilState(depthStencilStateDefault)
+        commandEncoder.setRenderPipelineState(renderPipelineDefault)
+        commandEncoder.setFragmentSamplerState(samplerStateDefault, index: 0)
+        
         let viewMatrix = makeViewMatrix(trans: scene.camera.position, rot: scene.camera.rotation)
         viewProjectionMatrix = scene.camera.projectionMatrix() * viewMatrix
         
@@ -329,6 +352,21 @@ class ARRenderer: NSObject, MTKViewDelegate {
                 let material = entity.material
                 // TODO: make it in common case
                 if node === arrowNode {
+                
+                    guard routeData.points.count == 4 else {
+                        assertionFailure("ARRouteData should contains four points")
+                        return
+                    }
+
+                    let (p0, p1, p2, p3) = (routeData.points[0], routeData.points[1], routeData.points[2], routeData.points[3])
+                    
+                    let arrowControlPoints = [
+                        float3(Float(p0.x), Float(p0.z), Float(-p0.y)),
+                        float3(Float(p1.x), Float(p1.z), Float(-p1.y)),
+                        float3(Float(p2.x), Float(p2.z), Float(-p2.y)),
+                        float3(Float(p3.x), Float(p3.z), Float(-p3.y))
+                    ]
+                    
                     var vertexUniforms = ArrowVertexUniforms(
                         viewProjectionMatrix: viewProjectionMatrix,
                         modelMatrix: modelMatrix,
@@ -403,18 +441,14 @@ class ARRenderer: NSObject, MTKViewDelegate {
 
         if let frame = dataProvider.getCurrentFrame(), let texture = makeTexture(from: frame) {
             commandEncoder.setRenderPipelineState(renderPipelineBackground)
-            commandEncoder.setVertexBytes(textureMappingVertices, length: MemoryLayout<TextureMappingVertexIn>.size * textureMappingVertices.count, index: 0)
+            commandEncoder.setVertexBuffer(backgroundVertexBuffer, offset: 0, index: 0)
             commandEncoder.setFragmentTexture(texture, index: 0)
             commandEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: textureMappingVertices.count)
         }
         
-        commandEncoder.setFrontFacing(.counterClockwise)
-        commandEncoder.setCullMode(.back)
-        commandEncoder.setDepthStencilState(depthStencilStateDefault)
-        commandEncoder.setRenderPipelineState(renderPipelineDefault)
-        commandEncoder.setFragmentSamplerState(samplerStateDefault, index: 0)
-        
-        drawScene(commandEncoder: commandEncoder)
+        if let routeData = dataProvider.getARRouteData() {
+            drawScene(commandEncoder: commandEncoder, routeData: routeData)
+        }
         
         commandEncoder.endEncoding()
         commandBuffer.present(drawable)
@@ -431,17 +465,5 @@ class ARRenderer: NSObject, MTKViewDelegate {
         #else
         return nil
         #endif
-    }
-    
-    private func updateLane() {
-        let data = dataProvider.getARRouteData()
-        let (p0, p1, p2, p3) = data.points
-        
-        arrowControlPoints = [
-            float3(Float(p0.x), Float(p0.z), Float(-p0.y)),
-            float3(Float(p1.x), Float(p1.z), Float(-p1.y)),
-            float3(Float(p2.x), Float(p2.z), Float(-p2.y)),
-            float3(Float(p3.x), Float(p3.z), Float(-p3.y))
-        ]
     }
 }
