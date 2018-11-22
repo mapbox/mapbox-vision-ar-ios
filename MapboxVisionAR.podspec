@@ -25,6 +25,6 @@ Pod::Spec.new do |s|
   s.swift_version = '4.1'
 
   s.dependency "MapboxVision", "= 0.0.1-alpha.4.2"
-  s.dependency "MapboxCoreNavigation", "~> 0.23.0"
+  s.dependency "MapboxCoreNavigation", "~> 0.24.0"
 
 end
