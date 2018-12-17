@@ -12,6 +12,8 @@
 		2E45492B2146999B0095BE31 /* lane.obj in Resources */ = {isa = PBXBuildFile; fileRef = 2EAB31A821440D290034D81C /* lane.obj */; };
 		2E45492C2146999B0095BE31 /* grid.obj in Resources */ = {isa = PBXBuildFile; fileRef = 2EAB31A921440D290034D81C /* grid.obj */; };
 		2E45492D2146999B0095BE31 /* nav-arrow.obj in Resources */ = {isa = PBXBuildFile; fileRef = 2EAB31AA21440D290034D81C /* nav-arrow.obj */; };
+		2E55CD0921C7C196004B42CB /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E55CD0821C7C196004B42CB /* Images.swift */; };
+		2E55CD0C21C7C1DC004B42CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E55CD0B21C7C1DC004B42CB /* Assets.xcassets */; };
 		2EAB319E21440CEC0034D81C /* MapboxVisionAR.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EAB319C21440CEC0034D81C /* MapboxVisionAR.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2EAB31B121440D2F0034D81C /* ARScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAB31AE21440D2E0034D81C /* ARScene.swift */; };
 		2EAB31B221440D2F0034D81C /* ARMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAB31AF21440D2F0034D81C /* ARMath.swift */; };
@@ -26,6 +28,8 @@
 /* Begin PBXFileReference section */
 		2E454927214683CF0095BE31 /* MapboxVision.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapboxVision.framework; path = "../cv-assist/cv-assist-ios/Carthage/Build/iOS/MapboxVision.framework"; sourceTree = SOURCE_ROOT; };
 		2E45492921468A270095BE31 /* MapboxCoreNavigation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapboxCoreNavigation.framework; path = Carthage/Build/iOS/MapboxCoreNavigation.framework; sourceTree = "<group>"; };
+		2E55CD0821C7C196004B42CB /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
+		2E55CD0B21C7C1DC004B42CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2EAB319921440CEC0034D81C /* MapboxVisionAR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MapboxVisionAR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EAB319C21440CEC0034D81C /* MapboxVisionAR.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapboxVisionAR.h; sourceTree = "<group>"; };
 		2EAB31A421440D240034D81C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -66,10 +70,27 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		2E55CD0721C7C118004B42CB /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				2E55CD0821C7C196004B42CB /* Images.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		2E55CD0A21C7C1C0004B42CB /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				2E55CD0B21C7C1DC004B42CB /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		2EAB318F21440CEC0034D81C = {
 			isa = PBXGroup;
 			children = (
 				2EAB319B21440CEC0034D81C /* MapboxVisionAR */,
+				2E55CD0A21C7C1C0004B42CB /* Resources */,
 				2EAB319A21440CEC0034D81C /* Products */,
 				2E454926214683CF0095BE31 /* Frameworks */,
 			);
@@ -86,6 +107,7 @@
 		2EAB319B21440CEC0034D81C /* MapboxVisionAR */ = {
 			isa = PBXGroup;
 			children = (
+				2E55CD0721C7C118004B42CB /* Helpers */,
 				2EAB31AB21440D290034D81C /* Models */,
 				2EAB31AE21440D2E0034D81C /* ARScene.swift */,
 				2EAB31AC21440D2B0034D81C /* ARRenderer.swift */,
@@ -180,6 +202,7 @@
 			files = (
 				2E45492B2146999B0095BE31 /* lane.obj in Resources */,
 				2E45492D2146999B0095BE31 /* nav-arrow.obj in Resources */,
+				2E55CD0C21C7C1DC004B42CB /* Assets.xcassets in Resources */,
 				2E45492C2146999B0095BE31 /* grid.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -196,6 +219,7 @@
 				2EAB31B521440D2F0034D81C /* ARRenderer.swift in Sources */,
 				2EAB31B321440D2F0034D81C /* VisionARNavigationViewController.swift in Sources */,
 				2EAB31B121440D2F0034D81C /* ARScene.swift in Sources */,
+				2E55CD0921C7C196004B42CB /* Images.swift in Sources */,
 				2EAB31B721440D2F0034D81C /* NavigationProvider.swift in Sources */,
 				2EAB31B421440D2F0034D81C /* NavigationRoute+Route.swift in Sources */,
 			);

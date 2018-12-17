@@ -106,6 +106,12 @@ public class VisionARNavigationViewController: UIViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         addChildView(arView)
+        
+        view.addSubview(logoView)
+        NSLayoutConstraint.activate([
+            view.safeAreaLayoutGuide.bottomAnchor.constraintEqualToSystemSpacingBelow(logoView.bottomAnchor, multiplier: 1),
+            view.safeAreaLayoutGuide.rightAnchor.constraintEqualToSystemSpacingAfter(logoView.rightAnchor, multiplier: 1),
+        ])
     }
     
     /**
@@ -138,6 +144,17 @@ public class VisionARNavigationViewController: UIViewController {
             childView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
     }
+    
+    /**
+     The Mapbox logo, positioned in the lower-right corner.
+     */
+    
+    public let logoView: UIView = {
+        let view = UIImageView(image: VisionImages.logo.image)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.alpha = 0.5
+        return view
+    }()
     
     private let arView: MTKView = {
         let view = MTKView()
