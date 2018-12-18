@@ -36,12 +36,25 @@ public class VisionARNavigationViewController: UIViewController {
     
     public weak var delegate: VisionARNavigationViewControllerDelegate?
     
+    /**
+        Control the visibility of the Mapbox logo.
+    */
+    
+    public var isLogoVisible: Bool {
+        get {
+            return !logoView.isHidden
+        }
+        set {
+            logoView.isHidden = !newValue
+        }
+    }
+    
     private let visionManager = VisionManager.shared
     private var renderer: ARRenderer?
     private var navigationManager: NavigationManager?
     
     /**
-    Create an instance of VisionARNavigationController by specifying route controller from MapboxCoreNavigation framework.
+        Create an instance of VisionARNavigationController by specifying route controller from MapboxCoreNavigation framework.
     */
     
     public init(navigationService: NavigationService? = nil) {
@@ -145,11 +158,7 @@ public class VisionARNavigationViewController: UIViewController {
         ])
     }
     
-    /**
-     The Mapbox logo, positioned in the lower-right corner.
-     */
-    
-    public let logoView: UIView = {
+    private let logoView: UIView = {
         let view = UIImageView(image: VisionImages.logo.image)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.alpha = 0.5
