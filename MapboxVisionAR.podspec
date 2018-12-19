@@ -18,13 +18,13 @@ Pod::Spec.new do |s|
   s.source        = { :git => "https://github.com/mapbox/mapbox-vision-ar-ios.git", :tag => "v#{s.version}" }
 
   s.source_files  = "MapboxVisionAR/**/*.{swift,h,metal}"
-  s.resource      = "MapboxVisionAR/Models/*"
+  s.resources     = ["MapboxVisionAR/Models/*", "Resources/*"]
 
   s.requires_arc = true
 
   s.swift_version = '4.1'
 
   s.dependency "MapboxVision", "= 0.0.1-alpha.4.2"
-  s.dependency "MapboxCoreNavigation", "~> 0.23.0"
+  s.dependency "MapboxCoreNavigation", "~> 0.26.0"
 
 end
