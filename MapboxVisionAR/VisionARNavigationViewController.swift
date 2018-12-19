@@ -36,12 +36,25 @@ public class VisionARNavigationViewController: UIViewController {
     
     public weak var delegate: VisionARNavigationViewControllerDelegate?
     
+    /**
+        Control the visibility of the Mapbox logo.
+    */
+    
+    public var isLogoVisible: Bool {
+        get {
+            return !logoView.isHidden
+        }
+        set {
+            logoView.isHidden = !newValue
+        }
+    }
+    
     private let visionManager = VisionManager.shared
     private var renderer: ARRenderer?
     private var navigationManager: NavigationManager?
     
     /**
-    Create an instance of VisionARNavigationController by specifying route controller from MapboxCoreNavigation framework.
+        Create an instance of VisionARNavigationController by specifying route controller from MapboxCoreNavigation framework.
     */
     
     public init(navigationService: NavigationService? = nil) {
@@ -106,6 +119,12 @@ public class VisionARNavigationViewController: UIViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         addChildView(arView)
+        
+        view.addSubview(logoView)
+        NSLayoutConstraint.activate([
+            view.safeAreaLayoutGuide.bottomAnchor.constraintEqualToSystemSpacingBelow(logoView.bottomAnchor, multiplier: 1),
+            view.safeAreaLayoutGuide.rightAnchor.constraintEqualToSystemSpacingAfter(logoView.rightAnchor, multiplier: 1),
+        ])
     }
     
     /**
@@ -138,6 +157,13 @@ public class VisionARNavigationViewController: UIViewController {
             childView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
     }
+    
+    private let logoView: UIView = {
+        let view = UIImageView(image: VisionImages.logo.image)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.alpha = 0.5
+        return view
+    }()
     
     private let arView: MTKView = {
         let view = MTKView()
