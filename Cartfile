@@ -1,4 +1,4 @@
-github "mapbox/mapbox-vision-ios" "kobe/minor-bump-vision-sdk-0.3.0"
+github "mapbox/mapbox-vision-ios" "~> 0.3.0"
 github "mapbox/mapbox-navigation-ios" ~> 0.29.0
 
 
