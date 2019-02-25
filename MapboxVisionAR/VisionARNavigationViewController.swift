@@ -127,25 +127,6 @@ public class VisionARNavigationViewController: UIViewController {
         ])
     }
     
-    /**
-     :nodoc:
-     */
-    
-    override public func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        visionManager.start()
-    }
-    
-    /**
-     :nodoc:
-     */
-    
-    override public func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        guard visionManager.delegate == nil else { return }
-        visionManager.stop()
-    }
-    
     private func addChildView(_ childView: UIView) {
         childView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(childView)
