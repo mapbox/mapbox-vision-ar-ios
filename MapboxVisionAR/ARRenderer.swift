@@ -72,7 +72,7 @@ private let textureMappingVertices: [Float] = [
 
 class ARRenderer: NSObject, MTKViewDelegate {
     
-    private let dataProvider: ARDataProvider
+//    private let dataProvider: ARDataProvider
     private let device: MTLDevice
     #if !targetEnvironment(simulator)
     private var textureCache: CVMetalTextureCache?
@@ -111,9 +111,10 @@ class ARRenderer: NSObject, MTKViewDelegate {
         case cantFindFunctions
     }
     
-    init(device: MTLDevice, dataProvider: ARDataProvider, colorPixelFormat: MTLPixelFormat, depthStencilPixelFormat: MTLPixelFormat) throws {
+    init(device: MTLDevice, colorPixelFormat: MTLPixelFormat, depthStencilPixelFormat: MTLPixelFormat) throws {
+//    init(device: MTLDevice, dataProvider: ARDataProvider, colorPixelFormat: MTLPixelFormat, depthStencilPixelFormat: MTLPixelFormat) throws {
         self.device = device
-        self.dataProvider = dataProvider
+//        self.dataProvider = dataProvider
         
         #if !targetEnvironment(simulator)
         guard CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, device, nil, &textureCache) == kCVReturnSuccess else {
@@ -319,12 +320,12 @@ class ARRenderer: NSObject, MTKViewDelegate {
         dt = 1 / Float(view.preferredFramesPerSecond)
         time += dt
         
-        let camParams = dataProvider.getCameraParams();
-        scene.camera.aspectRatio = camParams.aspectRatio;
-        scene.camera.fovRadians = camParams.verticalFOV;
-        scene.camera.rotation = simd_quatf.byAxis(camParams.roll - Float.pi / 2, -camParams.pitch, 0)
-        
-        scene.camera.position = float3(0, camParams.height, 0);
+//        let camParams = dataProvider.getCameraParams();
+//        scene.camera.aspectRatio = camParams.aspectRatio;
+//        scene.camera.fovRadians = camParams.verticalFOV;
+//        scene.camera.rotation = simd_quatf.byAxis(camParams.roll - Float.pi / 2, -camParams.pitch, 0)
+//
+//        scene.camera.position = float3(0, camParams.height, 0);
     }
     
     func drawScene(commandEncoder: MTLRenderCommandEncoder, routeData: ARRouteData) {
@@ -439,16 +440,16 @@ class ARRenderer: NSObject, MTKViewDelegate {
         guard let commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPass)
         else { return }
 
-        if let frame = dataProvider.getCurrentFrame(), let texture = makeTexture(from: frame) {
-            commandEncoder.setRenderPipelineState(renderPipelineBackground)
-            commandEncoder.setVertexBuffer(backgroundVertexBuffer, offset: 0, index: 0)
-            commandEncoder.setFragmentTexture(texture, index: 0)
-            commandEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: textureMappingVertices.count)
-        }
-        
-        if let routeData = dataProvider.getARRouteData() {
-            drawScene(commandEncoder: commandEncoder, routeData: routeData)
-        }
+//        if let frame = dataProvider.getCurrentFrame(), let texture = makeTexture(from: frame) {
+//            commandEncoder.setRenderPipelineState(renderPipelineBackground)
+//            commandEncoder.setVertexBuffer(backgroundVertexBuffer, offset: 0, index: 0)
+//            commandEncoder.setFragmentTexture(texture, index: 0)
+//            commandEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: textureMappingVertices.count)
+//        }
+//
+//        if let routeData = dataProvider.getARRouteData() {
+//            drawScene(commandEncoder: commandEncoder, routeData: routeData)
+//        }
         
         commandEncoder.endEncoding()
         commandBuffer.present(drawable)

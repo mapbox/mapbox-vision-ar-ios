@@ -49,7 +49,7 @@ public class VisionARNavigationViewController: UIViewController {
         }
     }
     
-    private let visionManager = VisionManager.shared
+//    private let visionManager = VisionManager.shared
     private var renderer: ARRenderer?
     private var navigationManager: NavigationManager?
     
@@ -64,7 +64,7 @@ public class VisionARNavigationViewController: UIViewController {
         self.navigationService = navigationService
         setNavigationService(navigationService)
         
-        visionManager.arDelegate = self
+//        visionManager.arDelegate = self
         
         guard let device = MTLCreateSystemDefaultDevice() else {
             assertionFailure("Can't create Metal device")
@@ -73,16 +73,16 @@ public class VisionARNavigationViewController: UIViewController {
         
         arView.device = device
         
-        do {
-            try renderer = ARRenderer(device: device,
-                                      dataProvider: visionManager,
-                                      colorPixelFormat: arView.colorPixelFormat,
-                                      depthStencilPixelFormat: arView.depthStencilPixelFormat)
-            renderer?.initScene()
-            arView.delegate = renderer
-        } catch {
-            assertionFailure(error.localizedDescription)
-        }
+//        do {
+//            try renderer = ARRenderer(device: device,
+//                                      dataProvider: visionManager,
+//                                      colorPixelFormat: arView.colorPixelFormat,
+//                                      depthStencilPixelFormat: arView.depthStencilPixelFormat)
+//            renderer?.initScene()
+//            arView.delegate = renderer
+//        } catch {
+//            assertionFailure(error.localizedDescription)
+//        }
     }
     
     /**
@@ -162,39 +162,39 @@ public class VisionARNavigationViewController: UIViewController {
 extension VisionARNavigationViewController: NavigationManagerDelegate {
     
     func navigationManager(_ navigationManager: NavigationManager, didUpdate route: NavigationRoute) {
-        visionManager.startNavigation(to: route)
+//        visionManager.startNavigation(to: route)
     }
     
     func navigationManagerArrivedAtDestination(_ navigationManager: NavigationManager) {
-        visionManager.stopNavigation()
+//        visionManager.stopNavigation()
     }
 }
 
-extension VisionARNavigationViewController: VisionManagerARDelegate {
-    
-    /**
-     :nodoc:
-    */
-    
-    public func visionManager(_ visionManager: VisionManager, didUpdateManeuverLocation maneuverLocation: ManeuverLocation?) {
-        guard let maneuver = maneuverLocation else {
-            delegate?.visionARNavigationViewController(self, didUpdateManeuverLocation: nil)
-            return
-        }
-        
-        let worldPosition = WorldCoordinate(
-            x: Double(maneuver.origin.x),
-            y: Double(maneuver.origin.y),
-            z: 0
-        )
-        
-        let framePixel = visionManager.worldToPixel(worldCoordinate: worldPosition)
-        
-        let locationInView = framePixel.convertForAspectRatioFill(
-            from: visionManager.frameSize,
-            to: view.bounds.size
-        )
-        
-        delegate?.visionARNavigationViewController(self, didUpdateManeuverLocation: locationInView)
-    }
-}
+//extension VisionARNavigationViewController: VisionManagerARDelegate {
+//    
+//    /**
+//     :nodoc:
+//    */
+//    
+//    public func visionManager(_ visionManager: VisionManager, didUpdateManeuverLocation maneuverLocation: ManeuverLocation?) {
+//        guard let maneuver = maneuverLocation else {
+//            delegate?.visionARNavigationViewController(self, didUpdateManeuverLocation: nil)
+//            return
+//        }
+//        
+//        let worldPosition = WorldCoordinate(
+//            x: Double(maneuver.origin.x),
+//            y: Double(maneuver.origin.y),
+//            z: 0
+//        )
+//        
+//        let framePixel = visionManager.worldToPixel(worldCoordinate: worldPosition)
+//        
+//        let locationInView = framePixel.convertForAspectRatioFill(
+//            from: visionManager.frameSize,
+//            to: view.bounds.size
+//        )
+//        
+//        delegate?.visionARNavigationViewController(self, didUpdateManeuverLocation: locationInView)
+//    }
+//}
