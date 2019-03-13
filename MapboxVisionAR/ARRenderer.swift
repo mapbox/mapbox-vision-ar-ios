@@ -111,7 +111,7 @@ class ARRenderer: NSObject, MTKViewDelegate {
         case cantFindFunctions
     }
     
-    public var frame: Image?
+    public var frame: CVPixelBuffer?
     public var camera: ARCamera?
     public var lane: ARLane?
     
@@ -443,7 +443,7 @@ class ARRenderer: NSObject, MTKViewDelegate {
         guard let commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPass)
         else { return }
 
-        if let frame = frame?.getCVPixelBuffer()?.takeRetainedValue(), let texture = makeTexture(from: frame) {
+        if let frame = frame, let texture = makeTexture(from: frame) {
             commandEncoder.setRenderPipelineState(renderPipelineBackground)
             commandEncoder.setVertexBuffer(backgroundVertexBuffer, offset: 0, index: 0)
             commandEncoder.setFragmentTexture(texture, index: 0)

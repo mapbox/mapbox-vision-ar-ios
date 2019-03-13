@@ -11,29 +11,16 @@ import MapboxCoreNavigation
 import MapboxVisionARCore
 
 /**
-    Protocol that defines a set of methods that are called by VisionARNavigationViewController to notify about AR navigation events.
-*/
-
-public protocol VisionARViewControllerDelegate: class {
-    
-    /**
-        Receive location of next next maneuver
-    */
-    
-    func visionARNavigationViewController(_ viewController: VisionARViewController, didUpdateManeuverLocation locationInView: CGPoint?)
-}
-
-/**
  Class that represents visual component that renders video stream from the camera and AR navigation route on top of that. It may be presented in a host application in a typical for the platform way.
 */
 
 public class VisionARViewController: UIViewController {
     
     /**
-        The delegate object to receive AR events.
+        The delegate object to receive navigation events.
     */
     
-    public weak var delegate: VisionARViewControllerDelegate?
+    public weak var navigationDelegate: NavigationManagerDelegate?
     
     /**
         Control the visibility of the Mapbox logo.
@@ -98,7 +85,7 @@ public class VisionARViewController: UIViewController {
         }
     }
     
-    public func present(frame: Image) {
+    public func present(frame: CVPixelBuffer) {
         renderer?.frame = frame
     }
     
@@ -106,14 +93,14 @@ public class VisionARViewController: UIViewController {
         renderer?.camera = camera
     }
     
-    public func present(lane: ARLane) {
+    public func present(lane: ARLane?) {
         renderer?.lane = lane
     }
     
     private func setNavigationService(_ navigationService: NavigationService?) {
         if let navigationService = navigationService {
             navigationManager = NavigationManager(navigationService: navigationService)
-            navigationManager?.delegate = self
+            navigationManager?.delegate = navigationDelegate
         } else {
             navigationManager = nil
         }
@@ -165,43 +152,3 @@ public class VisionARViewController: UIViewController {
         return view
     }()
 }
-
-extension VisionARViewController: NavigationManagerDelegate {
-    
-    func navigationManager(_ navigationManager: NavigationManager, didUpdate route: Route) {
-//        visionManager.startNavigation(to: route)
-    }
-    
-    func navigationManagerArrivedAtDestination(_ navigationManager: NavigationManager) {
-//        visionManager.stopNavigation()
-    }
-}
-
-//extension VisionARNavigationViewController: VisionManagerARDelegate {
-//    
-//    /**
-//     :nodoc:
-//    */
-//    
-//    public func visionManager(_ visionManager: VisionManager, didUpdateManeuverLocation maneuverLocation: ManeuverLocation?) {
-//        guard let maneuver = maneuverLocation else {
-//            delegate?.visionARNavigationViewController(self, didUpdateManeuverLocation: nil)
-//            return
-//        }
-//        
-//        let worldPosition = WorldCoordinate(
-//            x: Double(maneuver.origin.x),
-//            y: Double(maneuver.origin.y),
-//            z: 0
-//        )
-//        
-//        let framePixel = visionManager.worldToPixel(worldCoordinate: worldPosition)
-//        
-//        let locationInView = framePixel.convertForAspectRatioFill(
-//            from: visionManager.frameSize,
-//            to: view.bounds.size
-//        )
-//        
-//        delegate?.visionARNavigationViewController(self, didUpdateManeuverLocation: locationInView)
-//    }
-//}

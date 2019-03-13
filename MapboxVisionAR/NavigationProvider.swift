@@ -11,12 +11,12 @@ import MapboxCoreNavigation
 import MapboxVision
 import MapboxVisionARCore
 
-protocol NavigationManagerDelegate: class {
+public protocol NavigationManagerDelegate: class {
     func navigationManager(_ navigationManager: NavigationManager, didUpdate route: Route)
     func navigationManagerArrivedAtDestination(_ navigationManager: NavigationManager)
 }
 
-final class NavigationManager {
+public final class NavigationManager {
     weak var delegate: NavigationManagerDelegate? {
         didSet {
             delegate?.navigationManager(self, didUpdate: Route(route: navigationService.routeProgress.route))
