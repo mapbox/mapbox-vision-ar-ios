@@ -8,6 +8,7 @@
 
 import MetalKit
 import MapboxVision
+import MapboxVisionARCore
 
 // design
 let kArrowColor = float4(0.2745, 0.4117, 0.949, 0.99)
@@ -72,7 +73,6 @@ private let textureMappingVertices: [Float] = [
 
 class ARRenderer: NSObject, MTKViewDelegate {
     
-//    private let dataProvider: ARDataProvider
     private let device: MTLDevice
     #if !targetEnvironment(simulator)
     private var textureCache: CVMetalTextureCache?
@@ -111,10 +111,12 @@ class ARRenderer: NSObject, MTKViewDelegate {
         case cantFindFunctions
     }
     
+    public var frame: Image?
+    public var camera: ARCamera?
+    public var lane: ARLane?
+    
     init(device: MTLDevice, colorPixelFormat: MTLPixelFormat, depthStencilPixelFormat: MTLPixelFormat) throws {
-//    init(device: MTLDevice, dataProvider: ARDataProvider, colorPixelFormat: MTLPixelFormat, depthStencilPixelFormat: MTLPixelFormat) throws {
         self.device = device
-//        self.dataProvider = dataProvider
         
         #if !targetEnvironment(simulator)
         guard CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, device, nil, &textureCache) == kCVReturnSuccess else {
@@ -320,15 +322,15 @@ class ARRenderer: NSObject, MTKViewDelegate {
         dt = 1 / Float(view.preferredFramesPerSecond)
         time += dt
         
-//        let camParams = dataProvider.getCameraParams();
-//        scene.camera.aspectRatio = camParams.aspectRatio;
-//        scene.camera.fovRadians = camParams.verticalFOV;
-//        scene.camera.rotation = simd_quatf.byAxis(camParams.roll - Float.pi / 2, -camParams.pitch, 0)
-//
-//        scene.camera.position = float3(0, camParams.height, 0);
+        guard let camParams = camera else { return }
+        scene.camera.aspectRatio = camParams.aspectRatio
+        scene.camera.fovRadians = camParams.fov
+        scene.camera.rotation = simd_quatf.byAxis(camParams.roll - Float.pi / 2, -camParams.pitch, 0)
+
+        scene.camera.position = float3(0, camParams.height, 0);
     }
     
-    func drawScene(commandEncoder: MTLRenderCommandEncoder, routeData: ARRouteData) {
+    func drawScene(commandEncoder: MTLRenderCommandEncoder, lane: ARLane) {
         
         commandEncoder.setFrontFacing(.counterClockwise)
         commandEncoder.setCullMode(.back)
@@ -353,13 +355,14 @@ class ARRenderer: NSObject, MTKViewDelegate {
                 let material = entity.material
                 // TODO: make it in common case
                 if node === arrowNode {
-                
-                    guard routeData.points.count == 4 else {
-                        assertionFailure("ARRouteData should contains four points")
+                    let points = lane.curve.getControlPoints();
+                    
+                    guard points.count == 4 else {
+                        assertionFailure("ARLane should contains four points")
                         return
                     }
 
-                    let (p0, p1, p2, p3) = (routeData.points[0], routeData.points[1], routeData.points[2], routeData.points[3])
+                    let (p0, p1, p2, p3) = (points[0], points[1], points[2], points[3])
                     
                     let arrowControlPoints = [
                         float3(Float(p0.x), Float(p0.z), Float(-p0.y)),
@@ -440,16 +443,16 @@ class ARRenderer: NSObject, MTKViewDelegate {
         guard let commandEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPass)
         else { return }
 
-//        if let frame = dataProvider.getCurrentFrame(), let texture = makeTexture(from: frame) {
-//            commandEncoder.setRenderPipelineState(renderPipelineBackground)
-//            commandEncoder.setVertexBuffer(backgroundVertexBuffer, offset: 0, index: 0)
-//            commandEncoder.setFragmentTexture(texture, index: 0)
-//            commandEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: textureMappingVertices.count)
-//        }
-//
-//        if let routeData = dataProvider.getARRouteData() {
-//            drawScene(commandEncoder: commandEncoder, routeData: routeData)
-//        }
+        if let frame = frame?.getCVPixelBuffer()?.takeRetainedValue(), let texture = makeTexture(from: frame) {
+            commandEncoder.setRenderPipelineState(renderPipelineBackground)
+            commandEncoder.setVertexBuffer(backgroundVertexBuffer, offset: 0, index: 0)
+            commandEncoder.setFragmentTexture(texture, index: 0)
+            commandEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: textureMappingVertices.count)
+        }
+
+        if let lane = lane {
+            drawScene(commandEncoder: commandEncoder, lane: lane)
+        }
         
         commandEncoder.endEncoding()
         commandBuffer.present(drawable)

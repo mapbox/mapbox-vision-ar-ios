@@ -89,7 +89,7 @@ class ARNode {
     }
 }
 
-class ARCamera: ARNode {
+class ARCameraNode: ARNode {
     
     var needProjectionUpdate = Bool(true)
     var nearClipPlane = Float(0.01) {
@@ -139,6 +139,6 @@ class ARCamera: ARNode {
 
 class ARScene {
     var rootNode = ARNode(name: "root")
-    var camera = ARCamera()
+    var camera = ARCameraNode()
 }
 

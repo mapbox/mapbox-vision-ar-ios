@@ -8,33 +8,32 @@ import UIKit
 import MetalKit
 import MapboxVision
 import MapboxCoreNavigation
+import MapboxVisionARCore
 
 /**
     Protocol that defines a set of methods that are called by VisionARNavigationViewController to notify about AR navigation events.
 */
 
-public protocol VisionARNavigationViewControllerDelegate: class {
+public protocol VisionARViewControllerDelegate: class {
     
     /**
         Receive location of next next maneuver
     */
     
-    func visionARNavigationViewController(_ viewController: VisionARNavigationViewController, didUpdateManeuverLocation locationInView: CGPoint?)
+    func visionARNavigationViewController(_ viewController: VisionARViewController, didUpdateManeuverLocation locationInView: CGPoint?)
 }
 
 /**
  Class that represents visual component that renders video stream from the camera and AR navigation route on top of that. It may be presented in a host application in a typical for the platform way.
- 
- `VisionARNavigationController` creates, manages and exposes for external usage an instance of `VisionManager` .
 */
 
-public class VisionARNavigationViewController: UIViewController {
+public class VisionARViewController: UIViewController {
     
     /**
         The delegate object to receive AR events.
     */
     
-    public weak var delegate: VisionARNavigationViewControllerDelegate?
+    public weak var delegate: VisionARViewControllerDelegate?
     
     /**
         Control the visibility of the Mapbox logo.
@@ -48,8 +47,7 @@ public class VisionARNavigationViewController: UIViewController {
             logoView.isHidden = !newValue
         }
     }
-    
-//    private let visionManager = VisionManager.shared
+
     private var renderer: ARRenderer?
     private var navigationManager: NavigationManager?
     
@@ -64,8 +62,6 @@ public class VisionARNavigationViewController: UIViewController {
         self.navigationService = navigationService
         setNavigationService(navigationService)
         
-//        visionManager.arDelegate = self
-        
         guard let device = MTLCreateSystemDefaultDevice() else {
             assertionFailure("Can't create Metal device")
             return
@@ -73,16 +69,15 @@ public class VisionARNavigationViewController: UIViewController {
         
         arView.device = device
         
-//        do {
-//            try renderer = ARRenderer(device: device,
-//                                      dataProvider: visionManager,
-//                                      colorPixelFormat: arView.colorPixelFormat,
-//                                      depthStencilPixelFormat: arView.depthStencilPixelFormat)
-//            renderer?.initScene()
-//            arView.delegate = renderer
-//        } catch {
-//            assertionFailure(error.localizedDescription)
-//        }
+        do {
+            try renderer = ARRenderer(device: device,
+                                      colorPixelFormat: arView.colorPixelFormat,
+                                      depthStencilPixelFormat: arView.depthStencilPixelFormat)
+            renderer?.initScene()
+            arView.delegate = renderer
+        } catch {
+            assertionFailure(error.localizedDescription)
+        }
     }
     
     /**
@@ -101,6 +96,18 @@ public class VisionARNavigationViewController: UIViewController {
         didSet {
             setNavigationService(navigationService)
         }
+    }
+    
+    public func present(frame: Image) {
+        renderer?.frame = frame
+    }
+    
+    public func present(camera: ARCamera) {
+        renderer?.camera = camera
+    }
+    
+    public func present(lane: ARLane) {
+        renderer?.lane = lane
     }
     
     private func setNavigationService(_ navigationService: NavigationService?) {
@@ -159,9 +166,9 @@ public class VisionARNavigationViewController: UIViewController {
     }()
 }
 
-extension VisionARNavigationViewController: NavigationManagerDelegate {
+extension VisionARViewController: NavigationManagerDelegate {
     
-    func navigationManager(_ navigationManager: NavigationManager, didUpdate route: NavigationRoute) {
+    func navigationManager(_ navigationManager: NavigationManager, didUpdate route: Route) {
 //        visionManager.startNavigation(to: route)
     }
     

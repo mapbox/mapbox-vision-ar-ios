@@ -9,16 +9,17 @@
 import Foundation
 import MapboxCoreNavigation
 import MapboxVision
+import MapboxVisionARCore
 
 protocol NavigationManagerDelegate: class {
-    func navigationManager(_ navigationManager: NavigationManager, didUpdate route: NavigationRoute)
+    func navigationManager(_ navigationManager: NavigationManager, didUpdate route: Route)
     func navigationManagerArrivedAtDestination(_ navigationManager: NavigationManager)
 }
 
 final class NavigationManager {
     weak var delegate: NavigationManagerDelegate? {
         didSet {
-            delegate?.navigationManager(self, didUpdate: NavigationRoute(route: navigationService.routeProgress.route))
+            delegate?.navigationManager(self, didUpdate: Route(route: navigationService.routeProgress.route))
         }
     }
     
@@ -37,7 +38,7 @@ final class NavigationManager {
         
         if routeHasChanged {
             routeHasChanged = false
-            delegate?.navigationManager(self, didUpdate: NavigationRoute(route: routeProgress.route))
+            delegate?.navigationManager(self, didUpdate: Route(route: routeProgress.route))
         }
         
         if routeProgress.currentLegProgress.userHasArrivedAtWaypoint {
