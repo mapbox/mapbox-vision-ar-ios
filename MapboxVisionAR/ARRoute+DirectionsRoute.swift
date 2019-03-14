@@ -16,18 +16,12 @@ extension MapboxVisionARCore.Route {
         
         route.legs.forEach { $0.steps.forEach { step in
             
-            let maneuver = RoutePoint(
-                position: GeoCoordinate(lon: step.maneuverLocation.longitude, lat: step.maneuverLocation.latitude),
-                maneuver: .unknown
-            )
+            let maneuver = RoutePoint(position: GeoCoordinate(lon: step.maneuverLocation.longitude, lat: step.maneuverLocation.latitude))
             points.append(maneuver)
             
             guard let coords = step.coordinates else { return }
             let routePoints = coords.map {
-                RoutePoint(
-                    position: GeoCoordinate(lon: $0.longitude, lat: $0.latitude),
-                    maneuver: .unknown
-                )
+                RoutePoint(position: GeoCoordinate(lon: $0.longitude, lat: $0.latitude))
             }
             points.append(contentsOf: routePoints)
         } }
