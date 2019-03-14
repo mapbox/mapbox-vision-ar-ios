@@ -8,33 +8,19 @@ import UIKit
 import MetalKit
 import MapboxVision
 import MapboxCoreNavigation
-
-/**
-    Protocol that defines a set of methods that are called by VisionARNavigationViewController to notify about AR navigation events.
-*/
-
-public protocol VisionARNavigationViewControllerDelegate: class {
-    
-    /**
-        Receive location of next next maneuver
-    */
-    
-    func visionARNavigationViewController(_ viewController: VisionARNavigationViewController, didUpdateManeuverLocation locationInView: CGPoint?)
-}
+import MapboxVisionARCore
 
 /**
  Class that represents visual component that renders video stream from the camera and AR navigation route on top of that. It may be presented in a host application in a typical for the platform way.
- 
- `VisionARNavigationController` creates, manages and exposes for external usage an instance of `VisionManager` .
 */
 
-public class VisionARNavigationViewController: UIViewController {
+public class VisionARViewController: UIViewController {
     
     /**
-        The delegate object to receive AR events.
+        The delegate object to receive navigation events.
     */
     
-    public weak var delegate: VisionARNavigationViewControllerDelegate?
+    public weak var navigationDelegate: NavigationManagerDelegate?
     
     /**
         Control the visibility of the Mapbox logo.
@@ -48,8 +34,7 @@ public class VisionARNavigationViewController: UIViewController {
             logoView.isHidden = !newValue
         }
     }
-    
-    private let visionManager = VisionManager.shared
+
     private var renderer: ARRenderer?
     private var navigationManager: NavigationManager?
     
@@ -64,8 +49,6 @@ public class VisionARNavigationViewController: UIViewController {
         self.navigationService = navigationService
         setNavigationService(navigationService)
         
-        visionManager.arDelegate = self
-        
         guard let device = MTLCreateSystemDefaultDevice() else {
             assertionFailure("Can't create Metal device")
             return
@@ -75,7 +58,6 @@ public class VisionARNavigationViewController: UIViewController {
         
         do {
             try renderer = ARRenderer(device: device,
-                                      dataProvider: visionManager,
                                       colorPixelFormat: arView.colorPixelFormat,
                                       depthStencilPixelFormat: arView.depthStencilPixelFormat)
             renderer?.initScene()
@@ -103,10 +85,22 @@ public class VisionARNavigationViewController: UIViewController {
         }
     }
     
+    public func present(frame: CVPixelBuffer) {
+        renderer?.frame = frame
+    }
+    
+    public func present(camera: ARCamera) {
+        renderer?.camera = camera
+    }
+    
+    public func present(lane: ARLane?) {
+        renderer?.lane = lane
+    }
+    
     private func setNavigationService(_ navigationService: NavigationService?) {
         if let navigationService = navigationService {
             navigationManager = NavigationManager(navigationService: navigationService)
-            navigationManager?.delegate = self
+            navigationManager?.delegate = navigationDelegate
         } else {
             navigationManager = nil
         }
@@ -125,25 +119,6 @@ public class VisionARNavigationViewController: UIViewController {
             view.safeAreaLayoutGuide.bottomAnchor.constraintEqualToSystemSpacingBelow(logoView.bottomAnchor, multiplier: 1),
             view.safeAreaLayoutGuide.rightAnchor.constraintEqualToSystemSpacingAfter(logoView.rightAnchor, multiplier: 1),
         ])
-    }
-    
-    /**
-     :nodoc:
-     */
-    
-    override public func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        visionManager.start()
-    }
-    
-    /**
-     :nodoc:
-     */
-    
-    override public func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        guard visionManager.delegate == nil else { return }
-        visionManager.stop()
     }
     
     private func addChildView(_ childView: UIView) {
@@ -176,44 +151,4 @@ public class VisionARNavigationViewController: UIViewController {
         view.isOpaque = true
         return view
     }()
-}
-
-extension VisionARNavigationViewController: NavigationManagerDelegate {
-    
-    func navigationManager(_ navigationManager: NavigationManager, didUpdate route: NavigationRoute) {
-        visionManager.startNavigation(to: route)
-    }
-    
-    func navigationManagerArrivedAtDestination(_ navigationManager: NavigationManager) {
-        visionManager.stopNavigation()
-    }
-}
-
-extension VisionARNavigationViewController: VisionManagerARDelegate {
-    
-    /**
-     :nodoc:
-    */
-    
-    public func visionManager(_ visionManager: VisionManager, didUpdateManeuverLocation maneuverLocation: ManeuverLocation?) {
-        guard let maneuver = maneuverLocation else {
-            delegate?.visionARNavigationViewController(self, didUpdateManeuverLocation: nil)
-            return
-        }
-        
-        let worldPosition = WorldCoordinate(
-            x: Double(maneuver.origin.x),
-            y: Double(maneuver.origin.y),
-            z: 0
-        )
-        
-        let framePixel = visionManager.worldToPixel(worldCoordinate: worldPosition)
-        
-        let locationInView = framePixel.convertForAspectRatioFill(
-            from: visionManager.frameSize,
-            to: view.bounds.size
-        )
-        
-        delegate?.visionARNavigationViewController(self, didUpdateManeuverLocation: locationInView)
-    }
 }
