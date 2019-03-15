@@ -50,8 +50,3 @@ public final class VisionARManager: VisionARDelegateNative {
         delegate.onARLaneUpdated(visionARManager: self, lane: lane)
     }
 }
-
-public protocol VisionARDelegate {
-    func onARCameraUpdated(visionARManager: VisionARManager, camera: ARCamera)
-    func onARLaneUpdated(visionARManager: VisionARManager, lane: ARLane?)
-}
