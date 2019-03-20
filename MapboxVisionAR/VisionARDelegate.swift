@@ -9,11 +9,11 @@
 import Foundation
 
 public protocol VisionARDelegate: class {
-    func onARCameraUpdated(visionARManager: VisionARManager, camera: ARCamera)
-    func onARLaneUpdated(visionARManager: VisionARManager, lane: ARLane?)
+    func visionARManager(visionARManager: VisionARManager, didUpdateARCamera camera: ARCamera)
+    func visionARManager(visionARManager: VisionARManager, didUpdateARLane lane: ARLane?)
 }
 
 public extension VisionARDelegate {
-    func onARCameraUpdated(visionARManager: VisionARManager, camera: ARCamera) { }
-    func onARLaneUpdated(visionARManager: VisionARManager, lane: ARLane?) { }
+    func visionARManager(visionARManager: VisionARManager, didUpdateARCamera camera: ARCamera) { }
+    func visionARManager(visionARManager: VisionARManager, didUpdateARLane lane: ARLane?) { }
 }

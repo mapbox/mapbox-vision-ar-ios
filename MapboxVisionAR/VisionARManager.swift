@@ -43,10 +43,10 @@ public final class VisionARManager: VisionARDelegateNative {
     }
     
     public func onARCameraUpdated(_ camera: ARCamera) {
-        delegate.onARCameraUpdated(visionARManager: self, camera: camera)
+        delegate.visionARManager(visionARManager: self, didUpdateARCamera: camera)
     }
     
     public func onARLaneUpdated(_ lane: ARLane?) {
-        delegate.onARLaneUpdated(visionARManager: self, lane: lane)
+        delegate.visionARManager(visionARManager: self, didUpdateARLane: lane)
     }
 }
