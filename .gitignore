@@ -69,3 +69,5 @@ fastlane/screenshots/**/*.png
 fastlane/test_output
 
 MapboxVisionAR.xcworkspace
+Samples/VisionARSample/Cartfile.resolved
+*.framework

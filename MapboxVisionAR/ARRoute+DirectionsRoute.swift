@@ -10,8 +10,8 @@ import Foundation
 import MapboxDirections
 import MapboxVisionARCore
 
-extension MapboxVisionARCore.Route {
-    convenience init(route: MapboxDirections.Route) {
+public extension MapboxVisionARCore.Route {
+    public convenience init(route: MapboxDirections.Route) {
         var points = Array<RoutePoint>()
         
         route.legs.forEach { $0.steps.forEach { step in
