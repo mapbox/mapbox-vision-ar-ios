@@ -9,6 +9,7 @@ import MetalKit
 import MapboxVision
 import MapboxCoreNavigation
 import MapboxVisionARCore
+import CoreMedia
 
 /**
  Class that represents visual component that renders video stream from the camera and AR navigation route on top of that. It may be presented in a host application in a typical for the platform way.
@@ -85,8 +86,9 @@ public class VisionARViewController: UIViewController {
         }
     }
     
-    public func present(frame: CVPixelBuffer) {
-        renderer?.frame = frame
+    public func present(sampleBuffer: CMSampleBuffer) {
+        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+        renderer?.frame = pixelBuffer
     }
     
     public func present(camera: ARCamera) {

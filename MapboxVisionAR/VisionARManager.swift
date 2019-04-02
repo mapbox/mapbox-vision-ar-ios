@@ -18,7 +18,7 @@ public final class VisionARManager {
     
     public static func create(visionManager: VisionManager, delegate: VisionARDelegate? = nil) -> VisionARManager {
         let manager = VisionARManager()
-        manager.native = VisionARManagerNative.create(withVisionManager: visionManager.native, delegate: manager)
+        manager.native = VisionARManagerNative.create(visionManager: visionManager.native, delegate: manager)
         manager.delegate = delegate
         return manager
     }
