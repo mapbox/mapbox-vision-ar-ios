@@ -10,27 +10,23 @@ import Foundation
 import MapboxVision
 import MapboxVisionSafetyCore
 
-public final class VisionSafetyManager: VisionSafetyDelegateNative {
+public final class VisionSafetyManager {
     
     private var native: VisionSafetyManagerNative?
-    private let delegate: VisionSafetyDelegate
+    private var delegate: VisionSafetyDelegate?
     
-    public static func create(visionManager: VisionManager, delegate: VisionSafetyDelegate) -> VisionSafetyManager {
-        let mananger = VisionSafetyManager(delegate)
-        mananger.native = VisionSafetyManagerNative.create(withVisionManager: visionManager.native, delegate: mananger)
-        return mananger
-    }
-    
-    private init(_ delegate: VisionSafetyDelegate) {
-        self.delegate = delegate
+    public static func create(visionManager: VisionManager, delegate: VisionSafetyDelegate? = nil) -> VisionSafetyManager {
+        let manager = VisionSafetyManager()
+        manager.native = VisionSafetyManagerNative.create(visionManager: visionManager.native, delegate: manager)
+        manager.delegate = delegate
+        return manager
     }
     
     public func destroy() {
-        guard let native = native else {
-            assertionFailure()
-            return
-        }
-        native.destroy()
+        assert(native != nil, "VisionSafetyManager has alreaady been destroyed")
+        native?.destroy()
+        native = nil
+        delegate = nil
     }
     
     public func setCarCollisionSensitivity(warningTime: Float, criticalTime: Float) {
@@ -44,12 +40,14 @@ public final class VisionSafetyManager: VisionSafetyDelegateNative {
     public func setMinSpeedToAlertPerson(minSpeed: Float) {
         native?.setMinSpeedToAlertPerson(minSpeed)
     }
-    
+}
+
+extension VisionSafetyManager: VisionSafetyDelegateNative {
     public func onRoadRestrictionsUpdated(_ roadRestrictions: RoadRestrictions) {
-        delegate.onRoadRestrictionsUpdated(manager: self, roadRestrictions: roadRestrictions)
+        delegate?.onRoadRestrictionsUpdated(manager: self, roadRestrictions: roadRestrictions)
     }
     
     public func onCollisionsUpdated(_ collisions: [CollisionObject]) {
-        delegate.onCollisionsUpdated(manager: self, collisions: collisions)
+        delegate?.onCollisionsUpdated(manager: self, collisions: collisions)
     }
 }

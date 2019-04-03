@@ -11,42 +11,36 @@ import MapboxVisionCore
 import MapboxVisionARCore
 import MapboxVision
 
-public final class VisionARManager: VisionARDelegateNative {
+public final class VisionARManager {
     
     private var native: VisionARManagerNative?
-    private let delegate: VisionARDelegate
+    private var delegate: VisionARDelegate?
     
-    public static func create(visionManager: VisionManager, delegate: VisionARDelegate) -> VisionARManager {
-        let mananger = VisionARManager(delegate)
-        mananger.native = VisionARManagerNative.create(withVisionManager: visionManager.native, delegate: mananger)
-        return mananger
-    }
-    
-    private init(_ delegate: VisionARDelegate) {
-        self.delegate = delegate
-    }
-    
-    public func setRoute(_ route: Route) {
-        guard let native = native else {
-            assertionFailure()
-            return
-        }
-        native.setRoute(route)
+    public static func create(visionManager: VisionManager, delegate: VisionARDelegate? = nil) -> VisionARManager {
+        let manager = VisionARManager()
+        manager.native = VisionARManagerNative.create(visionManager: visionManager.native, delegate: manager)
+        manager.delegate = delegate
+        return manager
     }
     
     public func destroy() {
-        guard let native = native else {
-            assertionFailure()
-            return
-        }
-        native.destroy()
+        assert(native != nil, "VisionARManager has alreaady been destroyed")
+        native?.destroy()
+        native = nil
+        delegate = nil
     }
     
+    public func set(route: Route) {
+        native?.setRoute(route)
+    }
+}
+
+extension VisionARManager: VisionARDelegateNative {
     public func onARCameraUpdated(_ camera: ARCamera) {
-        delegate.visionARManager(visionARManager: self, didUpdateARCamera: camera)
+        delegate?.visionARManager(visionARManager: self, didUpdateARCamera: camera)
     }
     
     public func onARLaneUpdated(_ lane: ARLane?) {
-        delegate.visionARManager(visionARManager: self, didUpdateARLane: lane)
+        delegate?.visionARManager(visionARManager: self, didUpdateARLane: lane)
     }
 }
