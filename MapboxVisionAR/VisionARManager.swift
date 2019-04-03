@@ -24,6 +24,7 @@ public final class VisionARManager {
     }
     
     public func destroy() {
+        assert(native != nil, "VisionARManager has alreaady been destroyed")
         native?.destroy()
         native = nil
         delegate = nil

@@ -23,6 +23,7 @@ public final class VisionSafetyManager {
     }
     
     public func destroy() {
+        assert(native != nil, "VisionSafetyManager has alreaady been destroyed")
         native?.destroy()
         native = nil
         delegate = nil
