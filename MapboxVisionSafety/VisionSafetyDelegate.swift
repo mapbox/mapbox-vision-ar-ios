@@ -8,13 +8,14 @@
 
 import Foundation
 
-public protocol VisionSafetyDelegate: class {
-    func onRoadRestrictionsUpdated(manager: VisionSafetyManager, roadRestrictions: RoadRestrictions)
-    func onCollisionsUpdated(manager: VisionSafetyManager, collisions: [CollisionObject])
+public protocol VisionSafetyManagerDelegate: class {
+    func visionSafetyManager(_ visionSafetyManager: VisionSafetyManager, didUpdateRoadRestrictions: RoadRestrictions)
+    
+    func visionSafetyManager(_ visionSafetyManager: VisionSafetyManager, didUpdateCollisions: [CollisionObject])
 }
     
-public extension VisionSafetyDelegate {
-    func onRoadRestrictionsUpdated(manager: VisionSafetyManager, roadRestrictions: RoadRestrictions) { }
-    func onCollisionsUpdated(manager: VisionSafetyManager, collisions: [CollisionObject]) { }
+public extension VisionSafetyManagerDelegate {
+    func visionSafetyManager(_ visionSafetyManager: VisionSafetyManager, didUpdateRoadRestrictions: RoadRestrictions) {}
+    
+    func visionSafetyManager(_ visionSafetyManager: VisionSafetyManager, didUpdateCollisions: [CollisionObject]) {}
 }
-
