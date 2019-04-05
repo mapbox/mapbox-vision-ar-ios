@@ -14,9 +14,9 @@ import MapboxVision
 public final class VisionARManager {
     
     private var native: VisionARManagerNative?
-    private var delegate: VisionARDelegate?
+    private var delegate: VisionARManagerDelegate?
     
-    public static func create(visionManager: VisionManager, delegate: VisionARDelegate? = nil) -> VisionARManager {
+    public static func create(visionManager: VisionManager, delegate: VisionARManagerDelegate? = nil) -> VisionARManager {
         let manager = VisionARManager()
         manager.native = VisionARManagerNative.create(visionManager: visionManager.native, delegate: manager)
         manager.delegate = delegate
@@ -24,7 +24,7 @@ public final class VisionARManager {
     }
     
     public func destroy() {
-        assert(native != nil, "VisionARManager has alreaady been destroyed")
+        assert(native != nil, "VisionARManager has already been destroyed")
         native?.destroy()
         native = nil
         delegate = nil
@@ -35,12 +35,12 @@ public final class VisionARManager {
     }
 }
 
-extension VisionARManager: VisionARDelegateNative {
+extension VisionARManager: VisionARDelegate {
     public func onARCameraUpdated(_ camera: ARCamera) {
-        delegate?.visionARManager(visionARManager: self, didUpdateARCamera: camera)
+        delegate?.visionARManager(self, didUpdateARCamera: camera)
     }
     
     public func onARLaneUpdated(_ lane: ARLane?) {
-        delegate?.visionARManager(visionARManager: self, didUpdateARLane: lane)
+        delegate?.visionARManager(self, didUpdateARLane: lane)
     }
 }

@@ -53,7 +53,7 @@ extension ViewController: VideoSourceObserver {
     }
 }
 
-extension ViewController: VisionARDelegate {
+extension ViewController: VisionARManagerDelegate {
     
     func visionARManager(visionARManager: VisionARManager, didUpdateARLane lane: ARLane?) {
         DispatchQueue.main.async { [unowned self] in

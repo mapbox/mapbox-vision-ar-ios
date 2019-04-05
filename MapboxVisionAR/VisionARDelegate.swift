@@ -8,12 +8,14 @@
 
 import Foundation
 
-public protocol VisionARDelegate: class {
-    func visionARManager(visionARManager: VisionARManager, didUpdateARCamera camera: ARCamera)
-    func visionARManager(visionARManager: VisionARManager, didUpdateARLane lane: ARLane?)
+public protocol VisionARManagerDelegate: class {
+    func visionARManager(_ visionARManager: VisionARManager, didUpdateARCamera camera: ARCamera)
+    
+    func visionARManager(_ visionARManager: VisionARManager, didUpdateARLane lane: ARLane?)
 }
 
-public extension VisionARDelegate {
-    func visionARManager(visionARManager: VisionARManager, didUpdateARCamera camera: ARCamera) { }
-    func visionARManager(visionARManager: VisionARManager, didUpdateARLane lane: ARLane?) { }
+public extension VisionARManagerDelegate {
+    func visionARManager(_ visionARManager: VisionARManager, didUpdateARCamera camera: ARCamera) {}
+    
+    func visionARManager(_ visionARManager: VisionARManager, didUpdateARLane lane: ARLane?) {}
 }
